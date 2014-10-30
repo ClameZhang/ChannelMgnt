@@ -9,56 +9,59 @@ import com.clame.channelmgnt.widgets.BottomBarPackage.OnPackageItemChangedListen
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.os.Bundle;
 
 public class MainActivity extends FragmentActivity {
+	int userAuth = 0;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        int userAuth = 2;
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		userAuth = 1;
 
-        // declare the bottombar, and add the ItemChangedListener
-        RelativeLayout llPackage = (RelativeLayout) findViewById(R.id.ll_bottom_bar_package);
-        final BottomBarPackage bottomBarPackage = (BottomBarPackage) findViewById(R.id.main_bottom_bar_package);
-        bottomBarPackage.setOnPackageItemChangedListener(new OnPackageItemChangedListener() {
-			
+		// declare the bottombar, and add the ItemChangedListener
+		RelativeLayout llPackage = (RelativeLayout) findViewById(R.id.ll_bottom_bar_package);
+		final BottomBarPackage bottomBarPackage = (BottomBarPackage) findViewById(R.id.main_bottom_bar_package);
+		bottomBarPackage
+				.setOnPackageItemChangedListener(new OnPackageItemChangedListener() {
+
+					@Override
+					public void onPackageItemChanged(int index) {
+						// TODO Auto-generated method stub
+						showDetails(index);
+					}
+				});
+		bottomBarPackage.setSelectedState(0);
+
+		RelativeLayout llDelivery = (RelativeLayout) findViewById(R.id.ll_bottom_bar_delivery);
+		final BottomBarDelivery bottomBarDelivery = (BottomBarDelivery) findViewById(R.id.main_bottom_bar_delivery);
+		bottomBarDelivery.setOnItemChangedListener(new OnItemChangedListener() {
 			@Override
-			public void onPackageItemChanged(int index) {
-				// TODO Auto-generated method stub
+			public void onItemChanged(int index) {
 				showDetails(index);
 			}
 		});
-        bottomBarPackage.setSelectedState(0);
+		bottomBarDelivery.setSelectedState(0);
 
-        RelativeLayout llDelivery = (RelativeLayout) findViewById(R.id.ll_bottom_bar_delivery);
-        final BottomBarDelivery bottomBarDelivery = (BottomBarDelivery) findViewById(R.id.main_bottom_bar_delivery);
-        bottomBarDelivery.setOnItemChangedListener(new OnItemChangedListener() {
-            @Override
-            public void onItemChanged(int index) {
-                showDetails(index);
-            }
-        });
-        bottomBarDelivery.setSelectedState(0);
+		RelativeLayout llManagement = (RelativeLayout) findViewById(R.id.ll_bottom_bar_management);
+		final BottomBarManagement bottomBarManagement = (BottomBarManagement) findViewById(R.id.main_bottom_bar_management);
+		bottomBarManagement
+				.setOnManagementItemChangedListener(new OnManagementItemChangedListener() {
+					@Override
+					public void onManagementItemChanged(int index) {
+						showDetails(index);
+					}
+				});
+		bottomBarManagement.setSelectedState(0);
 
-        RelativeLayout llManagement = (RelativeLayout) findViewById(R.id.ll_bottom_bar_management);
-        final BottomBarManagement bottomBarManagement = (BottomBarManagement) findViewById(R.id.main_bottom_bar_management);
-        bottomBarManagement.setOnManagementItemChangedListener(new OnManagementItemChangedListener() {
-            @Override
-            public void onManagementItemChanged(int index) {
-                showDetails(index);
-            }
-        });
-        bottomBarManagement.setSelectedState(0);
-        
-        if (userAuth == 0) {
-        	llPackage.setVisibility(View.GONE);
-        	llDelivery.setVisibility(View.GONE);
+		if (userAuth == 0) {
+			llPackage.setVisibility(View.GONE);
+			llDelivery.setVisibility(View.GONE);
 		} else if (userAuth == 1) {
 			llManagement.setVisibility(View.GONE);
 			llDelivery.setVisibility(View.GONE);
@@ -66,34 +69,44 @@ public class MainActivity extends FragmentActivity {
 			llManagement.setVisibility(View.GONE);
 			llPackage.setVisibility(View.GONE);
 		}
-    }
+	}
 
-    /**
-     * @FunName showDetails
-     * @Description switch the fragment content according to the selected item on bottombar
-     * @param index
-     * @return N/A
-     * 
-     */
-    private void showDetails(int index) {
-        Fragment details = (Fragment) getSupportFragmentManager().findFragmentById(R.id.main_details);
+	/**
+	 * @FunName showDetails
+	 * @Description switch the fragment content according to the selected item
+	 *              on bottombar
+	 * @param index
+	 * @return N/A
+	 * 
+	 */
+	private void showDetails(int index) {
+		Fragment details = (Fragment) getSupportFragmentManager()
+				.findFragmentById(R.id.main_details);
 
-        // set the target fragment according to the index
-        switch (index) {
-        case 0:
-        //    details = new FragmentSuggest();
-            break;
-        case 1:
-         //   details = new FragmentSearch();
-            break;
-        case 2:
-         //   details = new FragmentMine();
-            break;
-        }
+		// set the target fragment according to the index
+		switch (index) {
+		case 0:
+			if (userAuth == 0) {
+				details = new FragmentPackageOne();
+			} else if (userAuth == 1) {
+				details = new FragmentPackageOne();
+			} else {
+				details = new FragmentPackageOne();
+			}
+			// details = new FragmentSuggest();
+			break;
+		case 1:
+			// details = new FragmentSearch();
+			break;
+		case 2:
+			// details = new FragmentMine();
+			break;
+		}
 
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.main_details, details);
-//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        ft.commit();
-    }
+		 FragmentTransaction ft =
+		 getSupportFragmentManager().beginTransaction();
+		 ft.replace(R.id.main_details, details);
+		 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		 ft.commit();
+	}
 }

@@ -21,6 +21,23 @@
     <string name="init_warning">注意：\n初次登陆，请修改密码\n新密码必须由6位以上的数字、字母或符号组成</string>
     <string name="init_btn">确认</string>
     
+    <string name="main_title_package">装箱</string>
+    <string name="main_title_history">历史</string>
+    <string name="main_title_delivery">发货</string>
+    <string name="main_title_check">验货</string>
+    
+    <string name="fragment_step1">第一步</string>
+    <string name="fragment_step2">第二步</string>
+    <string name="fragment_step3">第三步</string>
+    <string name="fragment_next">下一步</string>
+    <string name="fragment_scan">已扫描</string>
+    <string name="fragment_unscan">未扫描</string>
+    <string name="fragment_commit">提交装箱信息</string>
+    
+    <string name="fragment_pkg_step1">请选择装箱商品</string>
+    <string name="fragment_pkg_step2">你已选择“XX”商品，每箱需装AA盒，\n请继续扫描商品盒NFC标签\n重复盒子不会累计</string>
+    <string name="fragment_pkg_step3">你已扫描了AA盒XX\n请继续扫描包装大箱NFC标签</string>
+    
     <string name="error_nonetwork">无网络连接</string>
     <string name="error_server">无法连接到服务器</string>
     
