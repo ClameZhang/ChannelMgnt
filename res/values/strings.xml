@@ -11,6 +11,8 @@
     <string name="login_error_no_username">请输入用户名</string>
     <string name="login_error_no_password">请输入密码</string>
     <string name="login_error_wrong_info">错误的用户名/密码</string>
+    <string name="login_error_request">服务器连接错误</string>
+    <string name="login_error_init">首次登陆需要修改密码</string>
     <string name="login_warning">注意：\n使用此app时，请打开您手机的NFC扫描功能</string>
     
     <string name="init_password">请输入新密码</string>
@@ -32,11 +34,31 @@
     <string name="fragment_next">下一步</string>
     <string name="fragment_scan">已扫描</string>
     <string name="fragment_unscan">未扫描</string>
+    <string name="fragment_scan_success">验证成功</string>
     <string name="fragment_commit">提交装箱信息</string>
+    <string name="fragment_commit_del">提交发货信息</string>
     
     <string name="fragment_pkg_step1">请选择装箱商品</string>
-    <string name="fragment_pkg_step2">你已选择“XX”商品，每箱需装AA盒，\n请继续扫描商品盒NFC标签\n重复盒子不会累计</string>
+    <string name="fragment_pkg_step2">“XX”商品\n每箱需装AA盒\n请继续扫描商品盒NFC标签\n重复盒子不会累计</string>
     <string name="fragment_pkg_step3">你已扫描了AA盒XX\n请继续扫描包装大箱NFC标签</string>
+    
+    <string name="fragment_del_step1">请选择收货人</string>
+    <string name="fragment_del_step1_normal_level">收货人级别</string>
+    <string name="fragment_del_step1_normal_name">收货人名称</string>
+    <string name="fragment_del_step1_senior_name1">省级代理名称</string>
+    <string name="fragment_del_step1_senior_name2">一级代理名称</string>
+    <string name="fragment_del_step2">你已选择收货人为XXX\n请选择发货商品</string>
+    <string name="fragment_del_step3">你已选择发货商品为XX\n请扫描包装大箱NFC标签</string>
+    <string name="fragment_del_unit">大箱</string>
+    <string name="fragment_del_check">请扫描包装大箱NFC标签验货</string>
+    <string name="fragment_del_check_info">本箱货物为XX\n发货人为AA\n收货人为BB</string>
+    
+    <string name="fragment_mgnt_info">请扫描NFC标签查看发货链</string>
+    <string name="fragment_mgnt_check_info_title">本商品为XX</string>
+    
+    <string name="fragment_history_start">开始时间</string>
+    <string name="fragment_history_end">结束时间</string>
+    <string name="fragment_history_search">查询</string>
     
     <string name="error_nonetwork">无网络连接</string>
     <string name="error_server">无法连接到服务器</string>

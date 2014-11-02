@@ -1,5 +1,13 @@
 package com.clame.channelmgnt;
 
+import java.util.ArrayList;
+
+import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.bean.LevelBean;
+import com.clame.channelmgnt.bean.LimitBean;
+import com.clame.channelmgnt.bean.SerialBean;
+import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.helper.Helper;
 import com.clame.channelmgnt.widgets.BottomBarDelivery;
 import com.clame.channelmgnt.widgets.BottomBarDelivery.OnItemChangedListener;
 import com.clame.channelmgnt.widgets.BottomBarManagement;
@@ -12,17 +20,69 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 
 public class MainActivity extends FragmentActivity {
+
+	private NfcAdapter nfcAdapter;
+	private PendingIntent mPendingIntent;
+	private IntentFilter[] mFilters;
+	private String[][] mTechLists;
+	UserBean userBean;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
+	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
+	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
+	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
+
 	int userAuth = 0;
+	int delAuth = 0;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		userAuth = 1;
+
+		Bundle bundle = getIntent().getBundleExtra("BUNDLE");
+		userBean = (UserBean) bundle.getSerializable("USERBEAN");
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		serialList = (ArrayList<SerialBean>) bundle
+				.getSerializable("SERIALBEANS");
+
+		if ("0".equals(userBean.getuLevel())) {
+			userAuth = 0;
+		} else if ("1".equals(userBean.getuLevel())) {
+			userAuth = 1;
+		} else {
+			if ("2".equals(userBean.getuLevel())) {
+				delAuth = 0;
+			} else {
+				delAuth = 1;
+			}
+			userAuth = 2;
+		}
+
+		// initialize the nfc related settings
+		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+		mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+		IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
+
+		mFilters = new IntentFilter[] { ndef, };
+
+		mTechLists = new String[][] { new String[] { MifareUltralight.class
+				.getName() } };
 
 		// declare the bottombar, and add the ItemChangedListener
 		RelativeLayout llPackage = (RelativeLayout) findViewById(R.id.ll_bottom_bar_package);
@@ -82,31 +142,146 @@ public class MainActivity extends FragmentActivity {
 	private void showDetails(int index) {
 		Fragment details = (Fragment) getSupportFragmentManager()
 				.findFragmentById(R.id.main_details);
+		String tag = "";
 
 		// set the target fragment according to the index
 		switch (index) {
 		case 0:
 			if (userAuth == 0) {
-				details = new FragmentPackageOne();
+				details = new FragmentManagementCheck();
+				tag = "FragmentManagementCheck";
 			} else if (userAuth == 1) {
 				details = new FragmentPackageOne();
+				tag = "FragmentPackageOne";
 			} else {
-				details = new FragmentPackageOne();
+				if (delAuth == 0) {
+					details = new FragmentDeliveryOneSenior();
+					tag = "FragmentDeliveryOneSenior";
+				} else {
+					details = new FragmentDeliveryOneNormal();
+					tag = "FragmentDeliveryOneNormal";
+				}
 			}
-			// details = new FragmentSuggest();
 			break;
 		case 1:
-			// details = new FragmentSearch();
+			if (userAuth == 0) {
+				details = new FragmentManagementHistory();
+				tag = "FragmentManagementHistory";
+			} else if (userAuth == 1) {
+				details = new FragmentPackageHistory();
+				tag = "FragmentPackageHistory";
+			} else {
+				details = new FragmentDeliveryCheck();
+				tag = "FragmentDeliveryCheck";
+			}
 			break;
 		case 2:
-			// details = new FragmentMine();
+			details = new FragmentDeliveryHistory();
+			tag = "FragmentDeliveryHistory";
 			break;
 		}
 
-		 FragmentTransaction ft =
-		 getSupportFragmentManager().beginTransaction();
-		 ft.replace(R.id.main_details, details);
-		 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		 ft.commit();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("USERBEAN", userBean);
+		bundle.putSerializable("GOODBEANS",
+				goodList);
+		bundle.putSerializable("LEVELBEANS",
+				levelList);
+		bundle.putSerializable("LIMITBEANS",
+				limitList);
+		bundle.putSerializable("SERIALBEANS",
+				serialList);		
+		details.setArguments(bundle);
+		ft.replace(R.id.main_details, details, tag);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (nfcAdapter == null) {
+			// msg.setText(R.string.main_nonfc_warning);
+			return;
+		}
+		nfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
+				mTechLists);
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		// 处理该intent
+		if (nfcAdapter.isEnabled()) {
+			processIntent(intent);
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (nfcAdapter == null) {
+			// msg.setText(R.string.main_nonfc_warning);
+			return;
+		}
+		nfcAdapter.disableForegroundDispatch(this);
+	}
+
+	/**
+	 * Parses the NDEF Message from the intent and prints to the TextView
+	 */
+	@SuppressLint("NewApi")
+	private void processIntent(Intent intent) {
+		// 取出封装在intent中的TAG
+		Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+		for (String tech : tagFromIntent.getTechList()) {
+			System.out.println(tech);
+		}
+		// 读取TAG
+		MifareUltralight mfc = MifareUltralight.get(tagFromIntent);
+		try {
+			// Enable I/O operations to the tag from this TagTechnology object.
+			mfc.connect();
+
+			int type = mfc.getType();// 获取TAG的类型
+
+			if (type != MifareUltralight.TYPE_ULTRALIGHT) {
+				return;
+			}
+
+			String mCurrentID = Helper.getNfcID(mfc.readPages(0),
+					mfc.readPages(1));
+			FragmentPackageTwo fp2 = (FragmentPackageTwo) getSupportFragmentManager()
+					.findFragmentByTag("FragmentPackageTwo");
+			if (fp2 != null) {
+				fp2.update(mCurrentID);
+			}
+
+			FragmentPackageThree fp3 = (FragmentPackageThree) getSupportFragmentManager()
+					.findFragmentByTag("FragmentPackageThree");
+			if (fp3 != null) {
+				fp3.update(mCurrentID);
+			}
+
+			FragmentManagementCheck fc = (FragmentManagementCheck) getSupportFragmentManager()
+					.findFragmentByTag("FragmentManagementCheck");
+			if (fc != null) {
+				fc.update(mCurrentID);
+			}
+
+			FragmentDeliveryCheck fdc = (FragmentDeliveryCheck) getSupportFragmentManager()
+					.findFragmentByTag("FragmentDeliveryCheck");
+			if (fdc != null) {
+				fdc.update(mCurrentID);
+			}
+
+			FragmentDeliveryThree fdt = (FragmentDeliveryThree) getSupportFragmentManager()
+					.findFragmentByTag("FragmentDeliveryThree");
+			if (fdt != null) {
+				fdt.update(mCurrentID);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

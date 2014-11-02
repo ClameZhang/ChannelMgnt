@@ -13,12 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -35,9 +31,13 @@ public class FragmentPackageTwo extends Fragment {
 	TextView tv_scan_no;
 	TextView tv_unscan_no;
 	Button btn_next;
+	ArrayList<String> flagIDList;
 	
 	String goodName;
+	String goodID;
 	int reqCount;
+	String userName;
+	String serialID;
 
 	public FragmentPackageTwo() {
 	}
@@ -51,7 +51,10 @@ public class FragmentPackageTwo extends Fragment {
 		
 		Bundle bundle = getArguments();
 		goodName = bundle.getString("goodName");
-		reqCount = 20;
+		goodID = bundle.getString("goodID");
+		userName = bundle.getString("userName");
+		serialID = bundle.getString("serialID");
+		reqCount = Integer.parseInt(bundle.getString("goodLimit"));
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -105,21 +108,23 @@ public class FragmentPackageTwo extends Fragment {
 		
 		tv_msg = (TextView) layout.findViewById(R.id.tv_msg);
 		String msg = tv_msg.getText().toString();
-		int a = msg.indexOf("XX");
-		int b = msg.indexOf("20");
 		msg = msg.replace("XX", goodName);
 		msg = msg.replace("AA", String.valueOf(reqCount));
 		tv_msg.setText(msg);
+		
+		flagIDList = new ArrayList<String>();
 
 		tv_scan_no = (TextView) layout.findViewById(R.id.tv_scan_no);
+		tv_scan_no.setText("0");
+		
 		tv_unscan_no = (TextView) layout.findViewById(R.id.tv_unscan_no);
+		tv_unscan_no.setText(String.valueOf(reqCount));
 		
 		btn_next = (Button) layout.findViewById(R.id.btn_next);
 		btn_next.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				tv_unscan_no.setText("0");
 				if (!"0".equals(tv_unscan_no.getText().toString())) {
 
 					new AlertDialog.Builder(FragmentPackageTwo.this.getActivity())
@@ -136,18 +141,31 @@ public class FragmentPackageTwo extends Fragment {
 				}
 				
 				Bundle bundle = new Bundle();  
-                bundle.putString("goodName", goodName);  
-                bundle.putString("reqCount", String.valueOf(reqCount));  
+                bundle.putString("goodName", goodName); 
+                bundle.putString("goodID", goodID); 
+                bundle.putString("reqCount", String.valueOf(reqCount));
+				bundle.putString("userName", userName);
+				bundle.putString("serialID", serialID);
+                bundle.putSerializable("ID_LIST", flagIDList);
 				FragmentPackageThree fThree = new FragmentPackageThree();  
 		        FragmentManager fm = getFragmentManager();  
 		        FragmentTransaction tx = fm.beginTransaction();  
 		        fThree.setArguments(bundle);
-		        tx.add(R.id.main_details, fThree);  
+		        tx.add(R.id.main_details, fThree, "FragmentPackageThree");  
 		        tx.addToBackStack(null);  
 		        tx.commit(); 
 			}
 		});
 
 		return layout;
+	}
+	
+	public void update(String flagID) {
+		int unscanCount = Integer.parseInt(tv_unscan_no.getText().toString());
+		if (flagIDList.indexOf(flagID) < 0 && unscanCount > 0) {
+			flagIDList.add(flagID);
+			tv_scan_no.setText(String.valueOf(flagIDList.size()));
+			tv_unscan_no.setText(String.valueOf(reqCount - flagIDList.size()));
+		}
 	}
 }
