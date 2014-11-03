@@ -15,10 +15,15 @@ import com.clame.channelmgnt.bean.LevelBean;
 import com.clame.channelmgnt.bean.LimitBean;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.os.Parcelable;
 
 public class Helper {
 	public static String md5(String string) {
@@ -102,12 +107,12 @@ public class Helper {
 			versionNum = Integer.valueOf(android.os.Build.VERSION.SDK_INT);
 		} catch (NumberFormatException e) {
 		}
-		
+
 		version = "Android " + String.valueOf(versionNum);
-		
+
 		return version;
 	}
-	
+
 	public static String getNfcID(byte[] pageload1, byte[] pageload2) {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (pageload1 == null || pageload1.length <= 0 || pageload2 == null
@@ -131,11 +136,31 @@ public class Helper {
 
 		return stringBuilder.toString();
 	}
-	
-	public static String getLimit(ArrayList<LimitBean> limitList, ArrayList<GoodBean> goodList, String goodName) {
+
+	public static String getNfcContent(Intent intent) {
+		String content = "";
+		Parcelable[] rawArray = intent
+				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		NdefMessage mNdefMsg = (NdefMessage) rawArray[0];
+		NdefRecord mNdefRecord = mNdefMsg.getRecords()[0];
+		try {
+			if (mNdefRecord != null) {
+				content = new String(mNdefRecord.getPayload(), "UTF-8");
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		content = content.trim();
+
+		return content;
+	}
+
+	public static String getLimit(ArrayList<LimitBean> limitList,
+			ArrayList<GoodBean> goodList, String goodName) {
 		String limit = "";
 		String id = "";
-		
+
 		for (int i = 0; i < goodList.size(); i++) {
 			GoodBean goodBean = goodList.get(i);
 			if (goodName.equals(goodBean.getgName())) {
@@ -143,7 +168,7 @@ public class Helper {
 				break;
 			}
 		}
-		
+
 		for (int i = 0; i < limitList.size(); i++) {
 			LimitBean limitBean = limitList.get(i);
 			if (id.equals(limitBean.getlID())) {
@@ -151,13 +176,13 @@ public class Helper {
 				break;
 			}
 		}
-		
+
 		return limit;
 	}
-	
+
 	public static String getGoodID(ArrayList<GoodBean> goodList, String goodName) {
 		String id = "";
-		
+
 		for (int i = 0; i < goodList.size(); i++) {
 			GoodBean goodBean = goodList.get(i);
 			if (goodName.equals(goodBean.getgName())) {
@@ -165,13 +190,13 @@ public class Helper {
 				break;
 			}
 		}
-		
+
 		return id;
 	}
-	
+
 	public static String getLevelID(ArrayList<DownBean> downList, String name) {
 		String id = "";
-		
+
 		for (int i = 0; i < downList.size(); i++) {
 			DownBean downBean = downList.get(i);
 			if (name.equals(downBean.getgName())) {
@@ -181,10 +206,10 @@ public class Helper {
 		}
 		return id;
 	}
-	
+
 	public static String getLevelName(ArrayList<LevelBean> levelList, String ID) {
 		String name = "";
-		
+
 		for (int i = 0; i < levelList.size(); i++) {
 			LevelBean levelBean = levelList.get(i);
 			if (ID.equals(levelBean.getlID())) {
@@ -194,10 +219,11 @@ public class Helper {
 		}
 		return name;
 	}
-	
-	public static String getLevelIDByName(ArrayList<LevelBean> levelList, String name) {
+
+	public static String getLevelIDByName(ArrayList<LevelBean> levelList,
+			String name) {
 		String id = "";
-		
+
 		for (int i = 0; i < levelList.size(); i++) {
 			LevelBean levelBean = levelList.get(i);
 			if (name.equals(levelBean.getlName())) {
