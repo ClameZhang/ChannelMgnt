@@ -1,6 +1,17 @@
 package com.clame.channelmgnt;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.communication.RequestAPIClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -32,6 +43,7 @@ public class FragmentDeliveryCheck extends Fragment {
 	TextView tv_title;
 	TextView tv_check_status;
 	TextView tv_check_info;
+	UserBean userBean;
 
 	public FragmentDeliveryCheck() {
 	}
@@ -42,6 +54,9 @@ public class FragmentDeliveryCheck extends Fragment {
 		if (container == null) {
 			return null;
 		}
+
+		Bundle bundle = getArguments();
+		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -90,6 +105,99 @@ public class FragmentDeliveryCheck extends Fragment {
 	
 	public void update(String flagID) {
 		tv_check_status.setText(getResources().getString(R.string.fragment_scan_success));
-		tv_check_info.setVisibility(View.VISIBLE);
+		
+		String url = "py_r/2007";
+		JSONObject pkg = new JSONObject();
+		try {
+			pkg.put("username", userBean.getUserName());
+			pkg.put("son_id", flagID);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		StringEntity entity = null;
+		try {
+			entity = new StringEntity(pkg.toString());
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		RequestAPIClient.post(FragmentDeliveryCheck.this.getActivity(),
+				url, entity, new AsyncHttpResponseHandler() {
+
+					@Override
+					public void onSuccess(int arg0, Header[] arg1,
+							byte[] response) {
+						if (response == null) {
+							return;
+						}
+
+						String responseStr = "";
+						try {
+							responseStr = new String(response, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						try {
+							JSONTokener jsonParser = new JSONTokener(
+									responseStr);
+							JSONObject userObj = (JSONObject) jsonParser
+									.nextValue();
+							// 接下来的就是JSON对象的操作了
+							String code = userObj.getString("code");
+							String msg = userObj.getString("msg");
+
+							if (code.equals(RequestAPIClient.STATUS_FAIL)) {
+								String errStr = "非法的标签，请联系总部进行查证";
+								new AlertDialog.Builder(
+										FragmentDeliveryCheck.this
+												.getActivity())
+										.setTitle("提示")
+										.setMessage(errStr)
+										.setIcon(
+												android.R.drawable.ic_dialog_info)
+										.setPositiveButton(
+												"确定",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int whichButton) {
+													}
+												}).show();
+								return;
+							} else {
+								tv_check_info.setVisibility(View.VISIBLE);
+								return;
+							}
+						} catch (JSONException ex) {
+							return;
+						}
+					}
+
+					@Override
+					public void onFailure(int statusCode,
+							Header[] headers, byte[] responseBody,
+							Throwable error) {
+						new AlertDialog.Builder(
+								FragmentDeliveryCheck.this.getActivity())
+								.setTitle("提示")
+								.setMessage("服务器请求失败")
+								.setIcon(
+										android.R.drawable.ic_dialog_info)
+								.setPositiveButton(
+										"确定",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int whichButton) {
+											}
+										}).show();
+						return;
+					}
+				});
 	}
 }

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.clame.channelmgnt.communication.RequestAPIClient;
+import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import android.app.AlertDialog;
@@ -275,12 +276,30 @@ public class FragmentPackageThree extends Fragment {
 		return layout;
 	}
 
-	public void update(String flagID) {
+	public void update(String flagID, String nfcContent) {
+		String isContentOK = Helper.checkBigBoxTag(nfcContent, serialID,
+				goodID, "AA");
+
+		if (!"SUCC".equals(isContentOK)) {
+			new AlertDialog.Builder(FragmentPackageThree.this.getActivity())
+					.setTitle("提示")
+					.setMessage(isContentOK)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).show();
+			return;
+		}
+
 		if (getResources().getString(R.string.fragment_unscan).equals(
 				tv_scan_status.getText().toString())) {
 			tv_scan_status.setText(getResources().getString(
 					R.string.fragment_scan));
-			boxID = flagID;
 		}
+
+		boxID = flagID;
 	}
 }

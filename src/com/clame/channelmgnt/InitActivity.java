@@ -1,6 +1,7 @@
 package com.clame.channelmgnt;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
@@ -8,6 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.bean.LevelBean;
+import com.clame.channelmgnt.bean.LimitBean;
+import com.clame.channelmgnt.bean.SerialBean;
 import com.clame.channelmgnt.bean.UserBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
@@ -32,6 +37,10 @@ public class InitActivity extends Activity {
 	UserBean userBean = new UserBean();
 	String url = "py_w/2003";
 	StringEntity entity = null;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
+	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
+	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
+	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,12 @@ public class InitActivity extends Activity {
 		Intent i = getIntent();
 		name = i.getStringExtra("name");
 		userBean.setUserName(name);
+		Bundle bundle = i.getBundleExtra("BUNDLE");
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		serialList = (ArrayList<SerialBean>) bundle
+				.getSerializable("SERIALBEANS");
 
 		newPwd = (EditText) findViewById(R.id.tv_content_pwd);
 		confirmPwd = (EditText) findViewById(R.id.tv_content_confirm);
@@ -210,8 +225,16 @@ public class InitActivity extends Activity {
 																MainActivity.class);
 														Bundle bundle = new Bundle();
 														bundle.putSerializable("USERBEAN", userBean);
-														mainIntent.putExtras(bundle);
-														InitActivity.this.startActivity(mainIntent);
+														bundle.putSerializable("GOODBEANS",
+																goodList);
+														bundle.putSerializable("LEVELBEANS",
+																levelList);
+														bundle.putSerializable("LIMITBEANS",
+																limitList);
+														bundle.putSerializable("SERIALBEANS",
+																serialList);
+														mainIntent.putExtra("BUNDLE", bundle);
+														InitActivity.this.startActivity(mainIntent);													
 													} catch (JSONException ex) {
 														errorInfo.setText(getResources().getString(
 																R.string.login_error_request));

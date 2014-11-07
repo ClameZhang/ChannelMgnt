@@ -177,7 +177,7 @@ public class LoginActivity extends Activity {
 												limitList);
 										bundle.putSerializable("SERIALBEANS",
 												serialList);
-										initIntent.putExtras(bundle);
+										initIntent.putExtra("BUNDLE", bundle);
 
 										LoginActivity.this
 												.startActivity(initIntent);

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="2014/11/08 10:00"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_good"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="白金橙花匀亮修护隐形面膜"
+        android:textColor="#FFFFFFFF"
+        android:textSize="23sp" />
+
+    <TextView
+        android:id="@+id/tv_receiver"
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="3"
+        android:text="发货人：刘强东"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+</LinearLayout>

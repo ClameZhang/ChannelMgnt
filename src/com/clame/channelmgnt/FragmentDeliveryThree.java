@@ -52,10 +52,12 @@ public class FragmentDeliveryThree extends Fragment {
 	ArrayList<String> flagIDList;
 
 	String goodName;
+	String goodID;
 	String level;
 	String name;
 	String userName;
 	String userLevel;
+	String SerialID;
 	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
@@ -78,11 +80,13 @@ public class FragmentDeliveryThree extends Fragment {
 		userLevel = bundle.getString("userLevel");
 		name = bundle.getString("name");
 		goodName = bundle.getString("goodName");
+		SerialID = bundle.getString("SerialID");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
 		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
+		goodID = Helper.getGoodID(goodList, goodName);
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -292,7 +296,24 @@ public class FragmentDeliveryThree extends Fragment {
 		return layout;
 	}
 
-	public void update(String flagID) {
+	public void update(String flagID, String nfcContent) {
+		String isContentOK = Helper.checkBigBoxTag(nfcContent, SerialID,
+				goodID, "AA");
+
+		if (!"SUCC".equals(isContentOK)) {
+			new AlertDialog.Builder(FragmentDeliveryThree.this.getActivity())
+					.setTitle("提示")
+					.setMessage(isContentOK)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).show();
+			return;
+		}
+		
 		if (flagIDList.indexOf(flagID) < 0) {
 			flagIDList.add(flagID);
 			tv_scan_num.setText(String.valueOf(flagIDList.size()));

@@ -55,6 +55,7 @@ public class FragmentDeliveryTwo extends Fragment {
 	String name;
 	String userName;
 	String userLevel;
+	String SerialID; 
 	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
@@ -75,7 +76,7 @@ public class FragmentDeliveryTwo extends Fragment {
 		level = bundle.getString("level");
 		userName = bundle.getString("userName");
 		userLevel = bundle.getString("userLevel");
-		String SerialID = bundle.getString("SerialID");
+		SerialID = bundle.getString("SerialID");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
 		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
@@ -196,6 +197,7 @@ public class FragmentDeliveryTwo extends Fragment {
 				bundle.putString("name", name);
 				bundle.putString("level", level);
 				bundle.putString("userName", userName);
+				bundle.putString("serialID", SerialID);
 				bundle.putString("userLevel", userLevel);
 				bundle.putString("goodName", goodName);
 				bundle.putSerializable("GOODBEANS", goodList);

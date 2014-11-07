@@ -150,8 +150,8 @@ public class Helper {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
-		content = content.trim();
+
+		content = content.trim().toUpperCase();
 
 		return content;
 	}
@@ -232,5 +232,28 @@ public class Helper {
 			}
 		}
 		return id;
+	}
+
+	public static String checkBigBoxTag(String tagContent, String serialID,
+			String goodsID, String boxType) {
+		String result = "SUCC";
+
+		if (tagContent.length() != 14) {
+			result = "非法的大箱标签，请扫描正确的NFC标签";
+			return result;
+		}
+		
+		String factoryTmp = tagContent.substring(0, 2);
+		String serialIDTmp = tagContent.substring(8, 10);
+		String goodsIDTmp = tagContent.substring(10, 12);
+		String boxTypeTmp = tagContent.substring(12);
+
+		if (!"CH".equals(factoryTmp)
+				|| !serialID.equals(serialIDTmp) || !goodsID.equals(goodsIDTmp)
+				|| !boxType.equals(boxTypeTmp)) {
+			result = "非法的大箱标签，请扫描正确的NFC标签";
+		}
+
+		return result;
 	}
 }

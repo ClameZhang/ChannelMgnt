@@ -251,6 +251,7 @@ public class MainActivity extends FragmentActivity {
 
 			String mCurrentID = Helper.getNfcID(mfc.readPages(0),
 					mfc.readPages(1));
+			
 			FragmentPackageTwo fp2 = (FragmentPackageTwo) getSupportFragmentManager()
 					.findFragmentByTag("FragmentPackageTwo");
 			if (fp2 != null) {
@@ -260,7 +261,8 @@ public class MainActivity extends FragmentActivity {
 			FragmentPackageThree fp3 = (FragmentPackageThree) getSupportFragmentManager()
 					.findFragmentByTag("FragmentPackageThree");
 			if (fp3 != null) {
-				fp3.update(mCurrentID);
+				String mCurrentContent = Helper.getNfcContent(intent);
+				fp3.update(mCurrentID, mCurrentContent);
 			}
 
 			FragmentManagementCheck fc = (FragmentManagementCheck) getSupportFragmentManager()
@@ -278,7 +280,8 @@ public class MainActivity extends FragmentActivity {
 			FragmentDeliveryThree fdt = (FragmentDeliveryThree) getSupportFragmentManager()
 					.findFragmentByTag("FragmentDeliveryThree");
 			if (fdt != null) {
-				fdt.update(mCurrentID);
+				String mCurrentContent = Helper.getNfcContent(intent);
+				fdt.update(mCurrentID, mCurrentContent);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

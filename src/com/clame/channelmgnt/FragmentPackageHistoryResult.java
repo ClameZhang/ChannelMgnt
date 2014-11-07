@@ -2,6 +2,10 @@ package com.clame.channelmgnt;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
+import com.clame.channelmgnt.widgets.ListViewAdapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,8 +38,8 @@ public class FragmentPackageHistoryResult extends Fragment {
 	ImageView iv_return;
 	ImageView iv_user;
 	TextView tv_title;
-	DatePicker dp_start;
-	DatePicker dp_end;
+	ListView listView;
+	ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
 	public FragmentPackageHistoryResult() {
 	}
@@ -45,26 +50,26 @@ public class FragmentPackageHistoryResult extends Fragment {
 		if (container == null) {
 			return null;
 		}
-		
+
 		Bundle bundle = getArguments();
-		String start = bundle.getString("start");
-		String end = bundle.getString("end");
+		list = (ArrayList<Map<String, Object>>) bundle
+				.getSerializable("historylist");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = myInflater.inflate(R.layout.fragment_package_historyresult,
-				container, false);
+		View layout = myInflater.inflate(
+				R.layout.fragment_package_historyresult, container, false);
 
 		iv_return = (ImageView) layout.findViewById(R.id.iv_return);
 		iv_return.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-		        FragmentManager fm = getFragmentManager(); 
-		        FragmentTransaction tx = fm.beginTransaction();
-		        tx.remove(FragmentPackageHistoryResult.this);
-		        tx.commit();
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				tx.remove(FragmentPackageHistoryResult.this);
+				tx.commit();
 			}
 		});
 
@@ -73,7 +78,8 @@ public class FragmentPackageHistoryResult extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new AlertDialog.Builder(FragmentPackageHistoryResult.this.getActivity())
+				new AlertDialog.Builder(FragmentPackageHistoryResult.this
+						.getActivity())
 						.setTitle("提示")
 						.setMessage("确定退出?")
 						.setIcon(R.drawable.ic_return)
@@ -81,10 +87,10 @@ public class FragmentPackageHistoryResult extends Fragment {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
-										FragmentPackageHistoryResult.this.getActivity()
-												.setResult(-1);// 确定按钮事件
-										FragmentPackageHistoryResult.this.getActivity()
-												.finish();
+										FragmentPackageHistoryResult.this
+												.getActivity().setResult(-1);// 确定按钮事件
+										FragmentPackageHistoryResult.this
+												.getActivity().finish();
 									}
 								})
 						.setNegativeButton("取消",
@@ -99,6 +105,10 @@ public class FragmentPackageHistoryResult extends Fragment {
 
 		tv_title = (TextView) layout.findViewById(R.id.tv_title);
 		tv_title.setText(getResources().getText(R.string.main_title_history));
+
+		listView = (ListView) layout.findViewById(R.id.list_history);
+		List<Map<String, Object>> listData = list;
+		listView.setAdapter(new ListViewAdapter(this.getActivity(), listData));
 
 		return layout;
 	}
