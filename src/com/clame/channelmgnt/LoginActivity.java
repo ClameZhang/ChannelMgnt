@@ -14,6 +14,7 @@ import com.clame.channelmgnt.bean.LevelBean;
 import com.clame.channelmgnt.bean.LimitBean;
 import com.clame.channelmgnt.bean.SerialBean;
 import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.bean.UserInfoBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -39,10 +40,12 @@ public class LoginActivity extends Activity {
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
+	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
 	boolean isGoodBean = false;
 	boolean isLevelBean = false;
 	boolean isLimitBean = false;
 	boolean isSerialBean = false;
+	boolean isUserInfoBean = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +160,8 @@ public class LoginActivity extends Activity {
 
 									while (true) {
 										if (isGoodBean & isSerialBean
-												& isLevelBean && isLimitBean) {
+												& isLevelBean && isLimitBean
+												&& isUserInfoBean) {
 											break;
 										}
 									}
@@ -177,6 +181,8 @@ public class LoginActivity extends Activity {
 												limitList);
 										bundle.putSerializable("SERIALBEANS",
 												serialList);
+										bundle.putSerializable("USERINFOBEANS",
+												userInfoList);
 										initIntent.putExtra("BUNDLE", bundle);
 
 										LoginActivity.this
@@ -207,6 +213,8 @@ public class LoginActivity extends Activity {
 												limitList);
 										bundle.putSerializable("SERIALBEANS",
 												serialList);
+										bundle.putSerializable("USERINFOBEANS",
+												userInfoList);
 										mainIntent.putExtra("BUNDLE", bundle);
 										LoginActivity.this
 												.startActivity(mainIntent);
@@ -345,9 +353,9 @@ public class LoginActivity extends Activity {
 						ID = ID.substring(0, ID.length() - 1);
 						String Name = info[1];
 						Name = Name.substring(1);
-						Name = Name.substring(0, Name.length() - 1);						
+						Name = Name.substring(0, Name.length() - 1);
 						serialBean.setsID(ID);
-						serialBean.setsName(Name);						
+						serialBean.setsName(Name);
 						serialList.add(serialBean);
 					}
 
@@ -414,7 +422,7 @@ public class LoginActivity extends Activity {
 						ID = ID.substring(0, ID.length() - 1);
 						String Name = info[1];
 						Name = Name.substring(1);
-						Name = Name.substring(0, Name.length() - 1);					
+						Name = Name.substring(0, Name.length() - 1);
 						levelBean.setlID(ID);
 						levelBean.setlName(Name);
 						levelList.add(levelBean);
@@ -490,6 +498,74 @@ public class LoginActivity extends Activity {
 					}
 
 					isLimitBean = true;
+				} catch (JSONException ex) {
+					errorInfo.setText(getResources().getString(
+							R.string.login_error_request));
+					return;
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					byte[] responseBody, Throwable error) {
+				errorInfo.setText(getResources().getString(
+						R.string.error_server));
+				return;
+			}
+		});
+
+		String url6 = "py_r/2001/GETREALNAME";
+		RequestAPIClient.get(url6, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] response) {
+				if (response == null) {
+					errorInfo.setText(getResources().getString(
+							R.string.login_error_request));
+					return;
+				}
+
+				String responseStr = "";
+				try {
+					responseStr = new String(response, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated
+					// catch block
+					errorInfo.setText(getResources().getString(
+							R.string.login_error_request));
+					e.printStackTrace();
+				}
+
+				try {
+					JSONTokener jsonParser = new JSONTokener(responseStr);
+					JSONObject userObj = (JSONObject) jsonParser.nextValue();
+					// 接下来的就是JSON对象的操作了
+					String code = userObj.getString("code");
+					String msg = userObj.getString("msg");
+
+					if (code.equals(RequestAPIClient.STATUS_FAIL)) {
+						errorInfo.setText(msg);
+						return;
+					}
+
+					msg = msg.substring(1);
+					msg = msg.substring(0, msg.length() - 1);
+					String[] userInfoListTmp = msg.split(",");
+					for (int i = 0; i < userInfoListTmp.length; i++) {
+						UserInfoBean userInfoBean = new UserInfoBean();
+						String[] info = userInfoListTmp[i].split(":");
+						String ID = info[0];
+						ID = ID.substring(1);
+						ID = ID.substring(0, ID.length() - 1);
+						String Name = info[1];
+						Name = Name.substring(1);
+						Name = Name.substring(0, Name.length() - 1);
+						userInfoBean.setID(ID);
+						userInfoBean.setName(Name);
+						userInfoList.add(userInfoBean);
+					}
+
+					isUserInfoBean = true;
 				} catch (JSONException ex) {
 					errorInfo.setText(getResources().getString(
 							R.string.login_error_request));

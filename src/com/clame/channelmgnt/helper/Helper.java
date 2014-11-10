@@ -13,6 +13,7 @@ import com.clame.channelmgnt.bean.DownBean;
 import com.clame.channelmgnt.bean.GoodBean;
 import com.clame.channelmgnt.bean.LevelBean;
 import com.clame.channelmgnt.bean.LimitBean;
+import com.clame.channelmgnt.bean.UserInfoBean;
 
 import android.content.Context;
 import android.content.Intent;
@@ -233,7 +234,49 @@ public class Helper {
 		}
 		return id;
 	}
+	
+	public static String getUserNameByID(ArrayList<UserInfoBean> userInfoList, String ID) {
+		String userName = "";
+		
+		for (int i = 0; i < userInfoList.size(); i++) {
+			UserInfoBean userInfoBean = userInfoList.get(i);
+			if (ID.equals(userInfoBean.getID())) {
+				userName = userInfoBean.getName();
+				break;		
+			}
+		}
+		
+		return userName;
+	}
+	
+	public static String getIDByUserName(ArrayList<UserInfoBean> userInfoList, String userName) {
+		String ID = "";
+		
+		for (int i = 0; i < userInfoList.size(); i++) {
+			UserInfoBean userInfoBean = userInfoList.get(i);
+			if (userName.equals(userInfoBean.getName())) {
+				ID = userInfoBean.getID();
+				break;		
+			}
+		}
+		
+		return ID;
+	}
 
+	public static String getUserLevelByID(ArrayList<UserInfoBean> userInfoList, String ID) {
+		String userLevel = "";
+		
+		for (int i = 0; i < userInfoList.size(); i++) {
+			UserInfoBean userInfoBean = userInfoList.get(i);
+			if (ID.equals(userInfoBean.getID())) {
+				userLevel = userInfoBean.getLevel();
+				break;		
+			}
+		}
+		
+		return userLevel;
+	}
+	
 	public static String checkBigBoxTag(String tagContent, String serialID,
 			String goodsID, String boxType) {
 		String result = "SUCC";

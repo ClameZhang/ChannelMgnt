@@ -197,7 +197,7 @@ public class FragmentDeliveryTwo extends Fragment {
 				bundle.putString("name", name);
 				bundle.putString("level", level);
 				bundle.putString("userName", userName);
-				bundle.putString("serialID", SerialID);
+				bundle.putString("SerialID", SerialID);
 				bundle.putString("userLevel", userLevel);
 				bundle.putString("goodName", goodName);
 				bundle.putSerializable("GOODBEANS", goodList);

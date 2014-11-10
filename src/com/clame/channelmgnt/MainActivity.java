@@ -7,6 +7,7 @@ import com.clame.channelmgnt.bean.LevelBean;
 import com.clame.channelmgnt.bean.LimitBean;
 import com.clame.channelmgnt.bean.SerialBean;
 import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.bean.UserInfoBean;
 import com.clame.channelmgnt.helper.Helper;
 import com.clame.channelmgnt.widgets.BottomBarDelivery;
 import com.clame.channelmgnt.widgets.BottomBarDelivery.OnItemChangedListener;
@@ -40,6 +41,7 @@ public class MainActivity extends FragmentActivity {
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
+	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
 
 	int userAuth = 0;
 	int delAuth = 0;
@@ -57,6 +59,8 @@ public class MainActivity extends FragmentActivity {
 		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
+		userInfoList = (ArrayList<UserInfoBean>) bundle
+				.getSerializable("USERINFOBEANS");
 
 		if ("0".equals(userBean.getuLevel())) {
 			userAuth = 0;
@@ -154,13 +158,15 @@ public class MainActivity extends FragmentActivity {
 				details = new FragmentPackageOne();
 				tag = "FragmentPackageOne";
 			} else {
-				if (delAuth == 0) {
-					details = new FragmentDeliveryOneSenior();
-					tag = "FragmentDeliveryOneSenior";
-				} else {
-					details = new FragmentDeliveryOneNormal();
-					tag = "FragmentDeliveryOneNormal";
-				}
+				details = new FragmentDeliveryOne();
+				tag = "FragmentDeliveryOne";
+//				if (delAuth == 0) {
+//					details = new FragmentDeliveryOneSenior();
+//					tag = "FragmentDeliveryOneSenior";
+//				} else {
+//					details = new FragmentDeliveryOneNormal();
+//					tag = "FragmentDeliveryOneNormal";
+//				}
 			}
 			break;
 		case 1:
@@ -191,7 +197,9 @@ public class MainActivity extends FragmentActivity {
 		bundle.putSerializable("LIMITBEANS",
 				limitList);
 		bundle.putSerializable("SERIALBEANS",
-				serialList);		
+				serialList);
+		bundle.putSerializable("USERINFOBEANS",
+				userInfoList);
 		details.setArguments(bundle);
 		ft.replace(R.id.main_details, details, tag);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

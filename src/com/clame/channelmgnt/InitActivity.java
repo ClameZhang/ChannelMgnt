@@ -14,6 +14,7 @@ import com.clame.channelmgnt.bean.LevelBean;
 import com.clame.channelmgnt.bean.LimitBean;
 import com.clame.channelmgnt.bean.SerialBean;
 import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.bean.UserInfoBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -41,6 +42,7 @@ public class InitActivity extends Activity {
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
+	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class InitActivity extends Activity {
 		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
+		userInfoList = (ArrayList<UserInfoBean>) bundle
+				.getSerializable("USERINFOBEANS");
 
 		newPwd = (EditText) findViewById(R.id.tv_content_pwd);
 		confirmPwd = (EditText) findViewById(R.id.tv_content_confirm);
@@ -163,31 +167,40 @@ public class InitActivity extends Activity {
 									} else {
 										isLogin = true;
 									}
-									
+
 									if (!isLogin) {
 										return;
 									}
 
 									String url2 = "py_w/2001";
-									RequestAPIClient.post(InitActivity.this, url2, entity,
+									RequestAPIClient.post(InitActivity.this,
+											url2, entity,
 											new AsyncHttpResponseHandler() {
 
 												@Override
-												public void onSuccess(int arg0, Header[] arg1,
+												public void onSuccess(int arg0,
+														Header[] arg1,
 														byte[] response) {
 													if (response == null) {
-														errorInfo.setText(getResources().getString(
-																R.string.login_error_request));
+														errorInfo
+																.setText(getResources()
+																		.getString(
+																				R.string.login_error_request));
 														return;
 													}
 
 													String responseStr = "";
 													try {
-														responseStr = new String(response, "UTF-8");
+														responseStr = new String(
+																response,
+																"UTF-8");
 													} catch (UnsupportedEncodingException e) {
-														// TODO Auto-generated catch block
-														errorInfo.setText(getResources().getString(
-																R.string.login_error_request));
+														// TODO Auto-generated
+														// catch block
+														errorInfo
+																.setText(getResources()
+																		.getString(
+																				R.string.login_error_request));
 														e.printStackTrace();
 													}
 
@@ -197,14 +210,17 @@ public class InitActivity extends Activity {
 														JSONObject userObj = (JSONObject) jsonParser
 																.nextValue();
 														// 接下来的就是JSON对象的操作了
-														String code = userObj.getString("code");
-														String msg = userObj.getString("msg");
+														String code = userObj
+																.getString("code");
+														String msg = userObj
+																.getString("msg");
 
 														if (code.equals(RequestAPIClient.STATUS_FAIL)) {
 															if (!msg.equals(getResources()
 																	.getString(
 																			R.string.login_error_init))) {
-																errorInfo.setText(msg);
+																errorInfo
+																		.setText(msg);
 																return;
 															} else {
 																userBean.setInit(true);
@@ -215,8 +231,10 @@ public class InitActivity extends Activity {
 																msg);
 														JSONObject beanObj = (JSONObject) beanParser
 																.nextValue();
-														String uLevel = beanObj.getString("ulevel");
-														String serialID = beanObj.getString("s_id");
+														String uLevel = beanObj
+																.getString("ulevel");
+														String serialID = beanObj
+																.getString("s_id");
 														userBean.setuLevel(uLevel);
 														userBean.setSerialID(serialID);
 
@@ -224,30 +242,48 @@ public class InitActivity extends Activity {
 																InitActivity.this,
 																MainActivity.class);
 														Bundle bundle = new Bundle();
-														bundle.putSerializable("USERBEAN", userBean);
-														bundle.putSerializable("GOODBEANS",
+														bundle.putSerializable(
+																"USERBEAN",
+																userBean);
+														bundle.putSerializable(
+																"GOODBEANS",
 																goodList);
-														bundle.putSerializable("LEVELBEANS",
+														bundle.putSerializable(
+																"LEVELBEANS",
 																levelList);
-														bundle.putSerializable("LIMITBEANS",
+														bundle.putSerializable(
+																"LIMITBEANS",
 																limitList);
-														bundle.putSerializable("SERIALBEANS",
+														bundle.putSerializable(
+																"SERIALBEANS",
 																serialList);
-														mainIntent.putExtra("BUNDLE", bundle);
-														InitActivity.this.startActivity(mainIntent);													
+														bundle.putSerializable(
+																"USERINFOBEANS",
+																userInfoList);
+														mainIntent.putExtra(
+																"BUNDLE",
+																bundle);
+														InitActivity.this
+																.startActivity(mainIntent);
 													} catch (JSONException ex) {
-														errorInfo.setText(getResources().getString(
-																R.string.login_error_request));
+														errorInfo
+																.setText(getResources()
+																		.getString(
+																				R.string.login_error_request));
 														return;
 													}
 												}
 
 												@Override
-												public void onFailure(int statusCode,
-														Header[] headers, byte[] responseBody,
+												public void onFailure(
+														int statusCode,
+														Header[] headers,
+														byte[] responseBody,
 														Throwable error) {
-													errorInfo.setText(getResources().getString(
-															R.string.error_server));
+													errorInfo
+															.setText(getResources()
+																	.getString(
+																			R.string.error_server));
 													return;
 												}
 											});

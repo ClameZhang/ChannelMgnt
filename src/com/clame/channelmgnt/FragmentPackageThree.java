@@ -125,6 +125,7 @@ public class FragmentPackageThree extends Fragment {
 		tv_scan_status = (TextView) layout.findViewById(R.id.tv_scan_status);
 
 		btn_commit = (Button) layout.findViewById(R.id.btn_next);
+		
 		btn_commit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

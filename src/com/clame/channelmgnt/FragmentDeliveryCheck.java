@@ -43,6 +43,7 @@ public class FragmentDeliveryCheck extends Fragment {
 	TextView tv_title;
 	TextView tv_check_status;
 	TextView tv_check_info;
+	TextView tv_suggest;
 	UserBean userBean;
 
 	public FragmentDeliveryCheck() {
@@ -99,18 +100,22 @@ public class FragmentDeliveryCheck extends Fragment {
 
 		tv_check_info = (TextView) layout.findViewById(R.id.tv_check_info);
 		tv_check_info.setVisibility(View.GONE);
+		
+		tv_suggest = (TextView) layout.findViewById(R.id.tv_suggest);
+		tv_suggest.setVisibility(View.GONE);
 
 		return layout;
 	}
 	
-	public void update(String flagID) {
-		tv_check_status.setText(getResources().getString(R.string.fragment_scan_success));
-		
-		String url = "py_r/2007";
+	public void update(String flagID) {		
+		String url = "py_r/2014";
 		JSONObject pkg = new JSONObject();
 		try {
 			pkg.put("username", userBean.getUserName());
-			pkg.put("son_id", flagID);
+			pkg.put("stime", "");
+			pkg.put("etime", "9999-11-30 12:00:00");
+			pkg.put("nfc_id", flagID);
+			pkg.put("expgoods", "");
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -170,7 +175,9 @@ public class FragmentDeliveryCheck extends Fragment {
 												}).show();
 								return;
 							} else {
+								//{"recv_lid":"5","recv_name":"1","alname":"01","dist_time":"2014-11-10T16:51:12.000Z","par_id":"0442d37abe3480","send_lid":"2","send_name":"97"}
 								tv_check_info.setVisibility(View.VISIBLE);
+								tv_check_status.setText(getResources().getString(R.string.fragment_scan_success));
 								return;
 							}
 						} catch (JSONException ex) {

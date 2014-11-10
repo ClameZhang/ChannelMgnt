@@ -189,6 +189,7 @@ public class FragmentPackageHistory extends Fragment {
 											.nextValue();
 									// 接下来的就是JSON对象的操作了
 									String code = userObj.getString("code");
+									String msg = userObj.getString("msg");
 
 									if (code.equals(RequestAPIClient.STATUS_FAIL)) {
 										String errStr = "获取发货信息失败";

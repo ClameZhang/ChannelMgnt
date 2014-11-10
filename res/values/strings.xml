@@ -32,6 +32,7 @@
     <string name="fragment_step2">第二步</string>
     <string name="fragment_step3">第三步</string>
     <string name="fragment_next">下一步</string>
+    <string name="fragment_search">检索</string>
     <string name="fragment_scan">已扫描</string>
     <string name="fragment_unscan">未扫描</string>
     <string name="fragment_scan_success">验证成功</string>
@@ -42,16 +43,22 @@
     <string name="fragment_pkg_step2">“XX”商品\n每箱需装AA盒\n请继续扫描商品盒NFC标签\n重复盒子不会累计</string>
     <string name="fragment_pkg_step3">你已扫描了AA盒XX\n请继续扫描包装大箱NFC标签</string>
     
-    <string name="fragment_del_step1">请选择收货人</string>
+    <string name="fragment_del_step1">请检索收货人</string>
+    <string name="fragment_del_step1_search_condition">检索类型</string>
+    <string name="fragment_del_step1_search_content">检索内容</string>
     <string name="fragment_del_step1_normal_level">收货人级别</string>
     <string name="fragment_del_step1_normal_name">收货人名称</string>
     <string name="fragment_del_step1_senior_name1">省级代理名称</string>
     <string name="fragment_del_step1_senior_name2">一级代理名称</string>
+    <string name="fragment_del_step1_result_title">发货对象信息如下</string>
+    <string name="fragment_del_step1_result_id">授权号:</string>
+    <string name="fragment_del_step1_result_name">用户名:</string>
     <string name="fragment_del_step2">你已选择收货人为XXX\n请选择发货商品</string>
     <string name="fragment_del_step3">你已选择发货商品为XX\n请扫描包装大箱NFC标签</string>
     <string name="fragment_del_unit">大箱</string>
     <string name="fragment_del_check">请扫描包装大箱NFC标签验货</string>
     <string name="fragment_del_check_info">本箱货物为XX\n发货人为AA\n收货人为BB</string>
+    <string name="fragment_del_check_suggest">请联系总部进行退货处理</string>
     
     <string name="fragment_mgnt_info">请扫描NFC标签查看发货链</string>
     <string name="fragment_mgnt_check_info_title">本商品为XX</string>

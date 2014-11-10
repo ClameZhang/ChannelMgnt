@@ -148,7 +148,7 @@ public class FragmentDeliveryHistory extends Fragment {
 					return;
 				}
 
-				String url = "py_r/2004";
+				String url = "py_r/2016";
 				JSONObject del = new JSONObject();
 				try {
 					del.put("username", userBean.getUserName());
