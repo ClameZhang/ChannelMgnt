@@ -8,12 +8,17 @@ import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.clame.channelmgnt.bean.DeliveryHistoryBean;
+import com.clame.channelmgnt.bean.GoodBean;
 import com.clame.channelmgnt.bean.UserBean;
+import com.clame.channelmgnt.bean.UserInfoBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
+import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import android.app.AlertDialog;
@@ -49,6 +54,9 @@ public class FragmentManagementHistory extends Fragment {
 	DatePicker dp_end;
 	Button btn_search;
 	UserBean userBean;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
+	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
+	ArrayList<DeliveryHistoryBean> deliveryHistoryBean = new ArrayList<DeliveryHistoryBean>();
 
 	public FragmentManagementHistory() {
 	}
@@ -61,6 +69,9 @@ public class FragmentManagementHistory extends Fragment {
 		}
 
 		Bundle bundle = getArguments();
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
+		userInfoList = (ArrayList<UserInfoBean>) bundle
+				.getSerializable("USERINFOBEANS");
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
@@ -148,10 +159,9 @@ public class FragmentManagementHistory extends Fragment {
 					return;
 				}
 
-				String url = "py_r/2004";
+				String url = "py_r/2010";
 				JSONObject del = new JSONObject();
 				try {
-					del.put("username", userBean.getUserName());
 					del.put("stime", startStr);
 					del.put("etime", endStr);
 				} catch (JSONException e1) {
@@ -193,6 +203,26 @@ public class FragmentManagementHistory extends Fragment {
 											.nextValue();
 									// 接下来的就是JSON对象的操作了
 									String code = userObj.getString("code");
+									JSONArray msgArray = userObj
+											.getJSONArray("msg");
+									for (int i = 0; i < msgArray.length(); i++) {
+										JSONObject oj = msgArray
+												.getJSONObject(i);
+										DeliveryHistoryBean historyBean = new DeliveryHistoryBean();
+										String time = oj.getString("dist_time");
+										String recvID = oj
+												.getString("recv_name");
+										String recvName = Helper
+												.getUserNameByID(userInfoList,
+														recvID);
+										String goodID = oj.getString("alname");
+										String goodName = Helper.getGoodName(
+												goodList, goodID);
+										historyBean.setTime(time);
+										historyBean.setName(goodName);
+										historyBean.setRecvName(recvName);
+										deliveryHistoryBean.add(historyBean);
+									}
 
 									if (code.equals(RequestAPIClient.STATUS_FAIL)) {
 										String errStr = "获取发货信息失败";
@@ -216,13 +246,12 @@ public class FragmentManagementHistory extends Fragment {
 										Bundle bundle = new Bundle();
 
 										ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-										for (int i = 1; i < 5; i++) {
+										for (int i = 0; i < deliveryHistoryBean.size(); i++) {
 											Map<String, Object> map = new HashMap<String, Object>();
-											map.put("tv_date", "2014-11-0"
-													+ String.valueOf(i)
-													+ " 00:00");
-											map.put("tv_good",
-													"商品" + String.valueOf(i));
+											String time = deliveryHistoryBean.get(i).getTime();
+											time = time.substring(0, 10) + " " + time.substring(11, 19);
+											map.put("tv_date", "发货时间：" + time);
+											map.put("tv_good", "商品：" + deliveryHistoryBean.get(i).getName());
 											list.add(map);
 										}
 										bundle.putSerializable("historylist",

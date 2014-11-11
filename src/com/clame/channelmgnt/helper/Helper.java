@@ -195,6 +195,20 @@ public class Helper {
 		return id;
 	}
 
+	public static String getGoodName(ArrayList<GoodBean> goodList, String goodID) {
+		String name = "";
+
+		for (int i = 0; i < goodList.size(); i++) {
+			GoodBean goodBean = goodList.get(i);
+			if (goodID.equals(goodBean.getgID())) {
+				name = goodBean.getgName();
+				break;
+			}
+		}
+
+		return name;
+	}
+
 	public static String getLevelID(ArrayList<DownBean> downList, String name) {
 		String id = "";
 

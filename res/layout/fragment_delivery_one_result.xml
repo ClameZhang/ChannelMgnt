@@ -73,9 +73,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/fragment_del_step1_result_id"
                 android:textColor="#000000"
-                android:textAlignment="viewEnd"
                 android:textSize="24sp" />
 
             <TextView
@@ -84,8 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="#000000"
                 android:textAlignment="viewStart"
+                android:textColor="#000000"
                 android:textSize="24sp" />
         </LinearLayout>
 
@@ -101,9 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/fragment_del_step1_result_name"
                 android:textColor="#000000"
-                android:textAlignment="viewEnd"
                 android:textSize="24sp" />
 
             <TextView
@@ -112,8 +112,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="#000000"
                 android:textAlignment="viewStart"
+                android:textColor="#000000"
                 android:textSize="24sp" />
         </LinearLayout>
 

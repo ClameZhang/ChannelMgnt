@@ -282,7 +282,8 @@ public class MainActivity extends FragmentActivity {
 			FragmentDeliveryCheck fdc = (FragmentDeliveryCheck) getSupportFragmentManager()
 					.findFragmentByTag("FragmentDeliveryCheck");
 			if (fdc != null) {
-				fdc.update(mCurrentID);
+				String mCurrentContent = Helper.getNfcContent(intent);
+				fdc.update(mCurrentID, mCurrentContent);
 			}
 
 			FragmentDeliveryThree fdt = (FragmentDeliveryThree) getSupportFragmentManager()

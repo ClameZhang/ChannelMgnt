@@ -46,6 +46,7 @@ import android.widget.TextView;
  */
 public class FragmentDeliveryOneResult extends Fragment {
 
+	ImageView iv_return;
 	ImageView iv_user;
 	TextView tv_title;
 	TextView tv_uid;
@@ -89,6 +90,19 @@ public class FragmentDeliveryOneResult extends Fragment {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = myInflater.inflate(R.layout.fragment_delivery_one_result,
 				container, false);
+
+		iv_return = (ImageView) layout.findViewById(R.id.iv_return);
+		iv_return.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				tx.remove(FragmentDeliveryOneResult.this);
+				tx.commit();
+			}
+		});
 
 		iv_user = (ImageView) layout.findViewById(R.id.iv_user);
 		iv_user.setOnClickListener(new OnClickListener() {

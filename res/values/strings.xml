@@ -36,6 +36,7 @@
     <string name="fragment_scan">已扫描</string>
     <string name="fragment_unscan">未扫描</string>
     <string name="fragment_scan_success">验证成功</string>
+    <string name="fragment_scan_fail">验证失败</string>
     <string name="fragment_commit">提交装箱信息</string>
     <string name="fragment_commit_del">提交发货信息</string>
     
@@ -46,6 +47,7 @@
     <string name="fragment_del_step1">请检索收货人</string>
     <string name="fragment_del_step1_search_condition">检索类型</string>
     <string name="fragment_del_step1_search_content">检索内容</string>
+    <string name="fragment_del_step1_checkbox">发货给消费者</string>
     <string name="fragment_del_step1_normal_level">收货人级别</string>
     <string name="fragment_del_step1_normal_name">收货人名称</string>
     <string name="fragment_del_step1_senior_name1">省级代理名称</string>

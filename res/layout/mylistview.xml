@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="2014/11/08 10:00"
-        android:textColor="#FFFFFFFF"
+        android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="白金橙花匀亮修护隐形面膜"
-        android:textColor="#FFFFFFFF"
+        android:textColor="#000000"
         android:textSize="23sp" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="3"
         android:text="发货人：刘强东"
-        android:textColor="#FFFFFFFF"
-        android:textSize="20sp" />
+        android:textColor="#000000"
+        android:textSize="23sp" />
 
 </LinearLayout>

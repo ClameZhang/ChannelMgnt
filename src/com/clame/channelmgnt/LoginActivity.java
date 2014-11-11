@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -541,29 +542,19 @@ public class LoginActivity extends Activity {
 					JSONObject userObj = (JSONObject) jsonParser.nextValue();
 					// 接下来的就是JSON对象的操作了
 					String code = userObj.getString("code");
-					String msg = userObj.getString("msg");
-
-					if (code.equals(RequestAPIClient.STATUS_FAIL)) {
-						errorInfo.setText(msg);
-						return;
-					}
-
-					msg = msg.substring(1);
-					msg = msg.substring(0, msg.length() - 1);
-					String[] userInfoListTmp = msg.split(",");
-					for (int i = 0; i < userInfoListTmp.length; i++) {
+					JSONArray msgArray = userObj.getJSONArray("msg");
+					
+					for(int i = 0; i < msgArray.length(); i++) {
+		                JSONObject oj = msgArray.getJSONObject(i);
 						UserInfoBean userInfoBean = new UserInfoBean();
-						String[] info = userInfoListTmp[i].split(":");
-						String ID = info[0];
-						ID = ID.substring(1);
-						ID = ID.substring(0, ID.length() - 1);
-						String Name = info[1];
-						Name = Name.substring(1);
-						Name = Name.substring(0, Name.length() - 1);
+						String ID = oj.getString("name");
+						String Name = oj.getString("person_name");
+						String level = oj.getString("ulevel");
 						userInfoBean.setID(ID);
 						userInfoBean.setName(Name);
+						userInfoBean.setLevel(level);
 						userInfoList.add(userInfoBean);
-					}
+		            }
 
 					isUserInfoBean = true;
 				} catch (JSONException ex) {

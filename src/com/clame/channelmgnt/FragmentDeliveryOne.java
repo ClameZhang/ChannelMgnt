@@ -34,6 +34,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -53,6 +56,7 @@ public class FragmentDeliveryOne extends Fragment {
 	ArrayList<String> condition1List = new ArrayList<String>();
 	EditText et_condition;
 	Button btn_search;
+	CheckBox checkbox;
 
 	UserBean userBean;
 	StringEntity entity;
@@ -62,7 +66,7 @@ public class FragmentDeliveryOne extends Fragment {
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
 	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
-	ArrayList<String> downIDList = new ArrayList<String>(); 
+	ArrayList<String> downIDList = new ArrayList<String>();
 
 	public FragmentDeliveryOne() {
 	}
@@ -248,104 +252,95 @@ public class FragmentDeliveryOne extends Fragment {
 				});
 
 		btn_search = (Button) layout.findViewById(R.id.btn_next);
+		checkbox = (CheckBox) layout.findViewById(R.id.ckb_sendtoend);
+
 		btn_search.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String condition = "";
-				if (spinner_condition.getSelectedItem() != null) {
-					condition = spinner_condition.getSelectedItem().toString();
-				}
-
-				String content = "";
-				if ("".equals(et_condition.getText().toString())) {
-					new AlertDialog.Builder(FragmentDeliveryOne.this
-							.getActivity())
-							.setTitle("提示")
-							.setMessage("检索内容不能为空，请输入检索内容")
-							.setIcon(R.drawable.ic_return)
-							.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int whichButton) {
-											FragmentDeliveryOne.this
-													.getActivity()
-													.setResult(-1);// 确定按钮事件
-											FragmentDeliveryOne.this
-													.getActivity().finish();
-										}
-									}).show();
-					return;
-				} else {
-					content = et_condition.getText().toString();
-				}
-				
-				if (downIDList.size() == 0) {
-					new AlertDialog.Builder(FragmentDeliveryOne.this
-							.getActivity())
-							.setTitle("提示")
-							.setMessage("从服务器获取数据失败")
-							.setIcon(R.drawable.ic_return)
-							.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int whichButton) {
-											FragmentDeliveryOne.this
-													.getActivity()
-													.setResult(-1);// 确定按钮事件
-											FragmentDeliveryOne.this
-													.getActivity().finish();
-										}
-									}).show();
-					return;
-				}
-				
-				boolean isUserExist = false;
 				String DID = "";
 				String DNAME = "";
 				String DLEVEL = "";
-				if ("授权号".equals(condition)) {
-					if (downIDList.indexOf(content) > -1) {
-						isUserExist = true;
-						DID = content;
-						DNAME = Helper.getUserNameByID(userInfoList, DID);
-						DNAME = Helper.getUserNameByID(userInfoList, DID);
-					}
-				} else if ("用户名".equals(condition)) {
-					DNAME = content;
-					DID = Helper.getIDByUserName(userInfoList, DNAME);
-					if (downIDList.indexOf(DID) > -1) {
-						isUserExist = true;
-					}
-				}
-				DLEVEL = Helper.getUserLevelByID(userInfoList, DID);
-				DLEVEL = "5";
 				
-				isUserExist = true;
-				DID = "1";
-				DNAME = "关羽";
-				
-				if (!isUserExist) {
-					new AlertDialog.Builder(FragmentDeliveryOne.this
-							.getActivity())
-							.setTitle("提示")
-							.setMessage("该用户不存在")
-							.setIcon(R.drawable.ic_return)
-							.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int whichButton) {
-											FragmentDeliveryOne.this
-													.getActivity()
-													.setResult(-1);// 确定按钮事件
-											FragmentDeliveryOne.this
-													.getActivity().finish();
-										}
-									}).show();
-					return;
+				if (checkbox.isChecked()) {
+					DID = "8";
+					DNAME = "消费者";
+					DLEVEL = "8";
+				} else {
+
+					String condition = "";
+					if (spinner_condition.getSelectedItem() != null) {
+						condition = spinner_condition.getSelectedItem()
+								.toString();
+					}
+
+					String content = "";
+					if ("".equals(et_condition.getText().toString())) {
+						new AlertDialog.Builder(FragmentDeliveryOne.this
+								.getActivity())
+								.setTitle("提示")
+								.setMessage("检索内容不能为空，请输入检索内容")
+								.setIcon(R.drawable.ic_return)
+								.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int whichButton) {
+											}
+										}).show();
+						return;
+					} else {
+						content = et_condition.getText().toString();
+					}
+
+					if (downIDList.size() == 0) {
+						new AlertDialog.Builder(FragmentDeliveryOne.this
+								.getActivity())
+								.setTitle("提示")
+								.setMessage("从服务器获取数据失败")
+								.setIcon(R.drawable.ic_return)
+								.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int whichButton) {
+											}
+										}).show();
+						return;
+					}
+
+					boolean isUserExist = false;
+					if ("授权号".equals(condition)) {
+						if (downIDList.indexOf(content) > -1) {
+							isUserExist = true;
+							DID = content;
+							DNAME = Helper.getUserNameByID(userInfoList, DID);
+							DNAME = Helper.getUserNameByID(userInfoList, DID);
+						}
+					} else if ("用户名".equals(condition)) {
+						DNAME = content;
+						DID = Helper.getIDByUserName(userInfoList, DNAME);
+						if (downIDList.indexOf(DID) > -1) {
+							isUserExist = true;
+						}
+					}
+					DLEVEL = Helper.getUserLevelByID(userInfoList, DID);
+
+					if (!isUserExist) {
+						new AlertDialog.Builder(FragmentDeliveryOne.this
+								.getActivity())
+								.setTitle("提示")
+								.setMessage("该用户不存在")
+								.setIcon(R.drawable.ic_return)
+								.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int whichButton) {
+											}
+										}).show();
+						return;
+					}
 				}
 
 				Bundle bundle = new Bundle();
@@ -365,6 +360,24 @@ public class FragmentDeliveryOne extends Fragment {
 				tx.add(R.id.main_details, fResult);
 				tx.addToBackStack(null);
 				tx.commit();
+			}
+		});
+
+		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				// TODO Auto-generated method stub
+				if (isChecked) {
+					spinner_condition.setEnabled(false);
+					et_condition.setEnabled(false);
+					btn_search.setText("下一步");
+				} else {
+					spinner_condition.setEnabled(true);
+					et_condition.setEnabled(true);
+					btn_search.setText("检索");
+				}
 			}
 		});
 

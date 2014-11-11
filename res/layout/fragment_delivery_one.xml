@@ -101,6 +101,14 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <CheckBox
+            android:id="@+id/ckb_sendtoend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_del_step1_checkbox"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
         <Button
             android:id="@+id/btn_next"
             android:layout_width="wrap_content"

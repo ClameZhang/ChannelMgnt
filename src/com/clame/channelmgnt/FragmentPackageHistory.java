@@ -8,12 +8,16 @@ import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.bean.PackageHistoryBean;
 import com.clame.channelmgnt.bean.UserBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
+import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import android.app.AlertDialog;
@@ -45,6 +49,8 @@ public class FragmentPackageHistory extends Fragment {
 	DatePicker dp_end;
 	Button btn_search;
 	UserBean userBean;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
+	ArrayList<PackageHistoryBean> packageHistoryBean = new ArrayList<PackageHistoryBean>();
 
 	public FragmentPackageHistory() {
 	}
@@ -57,6 +63,7 @@ public class FragmentPackageHistory extends Fragment {
 		}
 
 		Bundle bundle = getArguments();
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
@@ -188,8 +195,18 @@ public class FragmentPackageHistory extends Fragment {
 									JSONObject userObj = (JSONObject) jsonParser
 											.nextValue();
 									// 接下来的就是JSON对象的操作了
-									String code = userObj.getString("code");
-									String msg = userObj.getString("msg");
+									String code = userObj.getString("code");											
+									JSONArray msgArray = userObj.getJSONArray("msg");									
+									for(int i = 0; i < msgArray.length(); i++) {
+						                JSONObject oj = msgArray.getJSONObject(i);
+										PackageHistoryBean historyBean = new PackageHistoryBean();
+										String time = oj.getString("pack_time");
+										String goodID = oj.getString("prdname");
+										String goodName = Helper.getGoodName(goodList, goodID);
+										historyBean.setTime(time);
+										historyBean.setName(goodName);
+										packageHistoryBean.add(historyBean);
+						            }
 
 									if (code.equals(RequestAPIClient.STATUS_FAIL)) {
 										String errStr = "获取发货信息失败";
@@ -213,13 +230,12 @@ public class FragmentPackageHistory extends Fragment {
 										Bundle bundle = new Bundle();
 
 										ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-										for (int i = 1; i < 5; i++) {
+										for (int i = 0; i < packageHistoryBean.size(); i++) {
 											Map<String, Object> map = new HashMap<String, Object>();
-											map.put("tv_date", "2014-11-0"
-													+ String.valueOf(i)
-													+ " 00:00");
-											map.put("tv_good",
-													"商品" + String.valueOf(i));
+											String time = packageHistoryBean.get(i).getTime();
+											time = time.substring(0, 10) + " " + time.substring(11, 19);
+											map.put("tv_date", "装箱时间：" + time);
+											map.put("tv_good", "商品：" + packageHistoryBean.get(i).getName());
 											list.add(map);
 										}
 										bundle.putSerializable("historylist",
