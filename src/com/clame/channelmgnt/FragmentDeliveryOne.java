@@ -267,7 +267,6 @@ public class FragmentDeliveryOne extends Fragment {
 					DNAME = "消费者";
 					DLEVEL = "8";
 				} else {
-
 					String condition = "";
 					if (spinner_condition.getSelectedItem() != null) {
 						condition = spinner_condition.getSelectedItem()
@@ -315,7 +314,6 @@ public class FragmentDeliveryOne extends Fragment {
 							isUserExist = true;
 							DID = content;
 							DNAME = Helper.getUserNameByID(userInfoList, DID);
-							DNAME = Helper.getUserNameByID(userInfoList, DID);
 						}
 					} else if ("用户名".equals(condition)) {
 						DNAME = content;
@@ -341,6 +339,22 @@ public class FragmentDeliveryOne extends Fragment {
 										}).show();
 						return;
 					}
+				}
+				
+				if (DID.equals(userBean.getUserName())) {
+					new AlertDialog.Builder(FragmentDeliveryOne.this
+							.getActivity())
+							.setTitle("提示")
+							.setMessage("不能选择自己作为发货人")
+							.setIcon(R.drawable.ic_return)
+							.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton) {
+										}
+									}).show();
+					return;
 				}
 
 				Bundle bundle = new Bundle();
@@ -371,6 +385,7 @@ public class FragmentDeliveryOne extends Fragment {
 				// TODO Auto-generated method stub
 				if (isChecked) {
 					spinner_condition.setEnabled(false);
+					et_condition.setText("");
 					et_condition.setEnabled(false);
 					btn_search.setText("下一步");
 				} else {

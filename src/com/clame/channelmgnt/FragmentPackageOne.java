@@ -65,6 +65,9 @@ public class FragmentPackageOne extends Fragment {
 		if (container == null) {
 			return null;
 		}
+		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentPackageOne");
 
 		Bundle bundle = getArguments();
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
@@ -168,6 +171,7 @@ public class FragmentPackageOne extends Fragment {
 				String goodLimit = Helper.getLimit(limitList, goodList, goodName);
 				String goodID = Helper.getGoodID(goodList, goodName);
 				Bundle bundle = new Bundle();
+				bundle.putSerializable("GOODBEANS", goodList);
 				bundle.putString("userName", userBean.getUserName());
 				bundle.putString("serialID", userBean.getSerialID());
 				bundle.putString("goodName", goodName);

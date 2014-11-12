@@ -2,6 +2,9 @@ package com.clame.channelmgnt;
 
 import java.util.ArrayList;
 
+import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.helper.Helper;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,12 +35,13 @@ public class FragmentPackageTwo extends Fragment {
 	TextView tv_unscan_no;
 	Button btn_next;
 	ArrayList<String> flagIDList;
-	
+
 	String goodName;
 	String goodID;
 	int reqCount;
 	String userName;
 	String serialID;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 
 	public FragmentPackageTwo() {
 	}
@@ -49,7 +53,11 @@ public class FragmentPackageTwo extends Fragment {
 			return null;
 		}
 		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentPackageTwo");
+
 		Bundle bundle = getArguments();
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		goodName = bundle.getString("goodName");
 		goodID = bundle.getString("goodID");
 		userName = bundle.getString("userName");
@@ -63,14 +71,14 @@ public class FragmentPackageTwo extends Fragment {
 
 		iv_return = (ImageView) layout.findViewById(R.id.iv_return);
 		iv_return.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-		        FragmentManager fm = getFragmentManager(); 
-		        FragmentTransaction tx = fm.beginTransaction();
-		        tx.remove(FragmentPackageTwo.this);
-		        tx.commit();
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				tx.remove(FragmentPackageTwo.this);
+				tx.commit();
 			}
 		});
 
@@ -105,63 +113,96 @@ public class FragmentPackageTwo extends Fragment {
 
 		tv_title = (TextView) layout.findViewById(R.id.tv_title);
 		tv_title.setText(getResources().getText(R.string.main_title_package));
-		
+
 		tv_msg = (TextView) layout.findViewById(R.id.tv_msg);
 		String msg = tv_msg.getText().toString();
 		msg = msg.replace("XX", goodName);
 		msg = msg.replace("AA", String.valueOf(reqCount));
 		tv_msg.setText(msg);
-		
+
 		flagIDList = new ArrayList<String>();
 
 		tv_scan_no = (TextView) layout.findViewById(R.id.tv_scan_no);
 		tv_scan_no.setText("0");
-		
+
 		tv_unscan_no = (TextView) layout.findViewById(R.id.tv_unscan_no);
 		tv_unscan_no.setText(String.valueOf(reqCount));
-		
+
 		btn_next = (Button) layout.findViewById(R.id.btn_next);
-		btn_next.setOnClickListener(new OnClickListener() {			
+		btn_next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (!"0".equals(tv_unscan_no.getText().toString())) {
 
-					new AlertDialog.Builder(FragmentPackageTwo.this.getActivity())
+					new AlertDialog.Builder(FragmentPackageTwo.this
+							.getActivity())
 							.setTitle("提示")
 							.setMessage("你还没有扫满一箱，请继续扫描")
 							.setIcon(android.R.drawable.ic_dialog_info)
 							.setPositiveButton("确定",
 									new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface dialog,
+										public void onClick(
+												DialogInterface dialog,
 												int whichButton) {
 										}
 									}).show();
 					return;
 				}
-				
-				Bundle bundle = new Bundle();  
-                bundle.putString("goodName", goodName); 
-                bundle.putString("goodID", goodID); 
-                bundle.putString("reqCount", String.valueOf(reqCount));
+
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("GOODBEANS", goodList);
+				bundle.putString("goodName", goodName);
+				bundle.putString("goodID", goodID);
+				bundle.putString("reqCount", String.valueOf(reqCount));
 				bundle.putString("userName", userName);
 				bundle.putString("serialID", serialID);
-                bundle.putSerializable("ID_LIST", flagIDList);
-				FragmentPackageThree fThree = new FragmentPackageThree();  
-		        FragmentManager fm = getFragmentManager();  
-		        FragmentTransaction tx = fm.beginTransaction();  
-		        fThree.setArguments(bundle);
-		        tx.add(R.id.main_details, fThree, "FragmentPackageThree");  
-		        tx.addToBackStack(null);  
-		        tx.commit(); 
+				bundle.putSerializable("ID_LIST", flagIDList);
+				FragmentPackageThree fThree = new FragmentPackageThree();
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				fThree.setArguments(bundle);
+				tx.add(R.id.main_details, fThree, "FragmentPackageThree");
+				tx.addToBackStack(null);
+				tx.commit();
 			}
 		});
 
 		return layout;
 	}
-	
-	public void update(String flagID) {
+
+	public void update(String flagID, String nfcContent) {
+		String isContentOK = Helper.checkDelSmallBoxTag(nfcContent);
+
+		if (!"SUCC".equals(isContentOK)) {
+			new AlertDialog.Builder(FragmentPackageTwo.this.getActivity())
+					.setTitle("提示")
+					.setMessage(isContentOK)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).show();
+			return;
+		}
+
 		int unscanCount = Integer.parseInt(tv_unscan_no.getText().toString());
+		if (unscanCount == 0) {
+			new AlertDialog.Builder(FragmentPackageTwo.this.getActivity())
+					.setTitle("提示")
+					.setMessage("请点击下一步")
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).show();
+			return;
+		}
+
 		if (flagIDList.indexOf(flagID) < 0 && unscanCount > 0) {
 			flagIDList.add(flagID);
 			tv_scan_no.setText(String.valueOf(flagIDList.size()));

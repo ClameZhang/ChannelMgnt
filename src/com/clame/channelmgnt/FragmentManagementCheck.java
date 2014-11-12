@@ -44,6 +44,9 @@ public class FragmentManagementCheck extends Fragment {
 		if (container == null) {
 			return null;
 		}
+		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentManagementCheck");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.clame.channelmgnt.bean.GoodBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -46,6 +47,7 @@ public class FragmentPackageThree extends Fragment {
 	String userName;
 	String goodID;
 	String serialID;
+	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 
 	public FragmentPackageThree() {
 	}
@@ -57,8 +59,12 @@ public class FragmentPackageThree extends Fragment {
 		if (container == null) {
 			return null;
 		}
+		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentPackageThree");
 
 		Bundle bundle = getArguments();
+		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		String goodName = bundle.getString("goodName");
 		String reqCount = bundle.getString("reqCount");
 		userName = bundle.getString("userName");
@@ -278,7 +284,7 @@ public class FragmentPackageThree extends Fragment {
 	}
 
 	public void update(String flagID, String nfcContent) {
-		String isContentOK = Helper.checkBigBoxTag(nfcContent, serialID,
+		String isContentOK = Helper.checkPkgBigBoxTag(goodList, nfcContent, serialID,
 				goodID, "AA");
 
 		if (!"SUCC".equals(isContentOK)) {

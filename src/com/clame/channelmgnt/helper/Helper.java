@@ -142,6 +142,11 @@ public class Helper {
 		String content = "";
 		Parcelable[] rawArray = intent
 				.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+		
+		if (rawArray == null) {
+			return "";
+		}
+		
 		NdefMessage mNdefMsg = (NdefMessage) rawArray[0];
 		NdefRecord mNdefRecord = mNdefMsg.getRecords()[0];
 		try {
@@ -289,6 +294,105 @@ public class Helper {
 		}
 		
 		return userLevel;
+	}
+	
+	public static String checkDelSmallBoxTag(String tagContent) {
+		String result = "SUCC";
+
+		if (tagContent.length() != 0) {
+			if (tagContent.length() != 14) {
+				result = "无法记录错误内容的标签，请扫描商品盒子专用标签";
+				return result;
+			}
+			
+			String factoryTmp = tagContent.substring(0, 2);
+			String serialIDTmp = tagContent.substring(8, 10);
+			String goodsIDTmp = tagContent.substring(10, 12);
+			String boxTypeTmp = tagContent.substring(12);
+
+			if (!"CH".equals(factoryTmp)) {
+				result = "无法记录错误内容的标签，请扫描商品盒子专用标签";
+				return result;
+			}
+			
+			if ((!serialIDTmp.equals("A1") && !serialIDTmp.equals("A2")) || 
+				(!goodsIDTmp.equals("01") && !goodsIDTmp.equals("02") && !goodsIDTmp.equals("03") && !goodsIDTmp.equals("04")) || 
+				!boxTypeTmp.equals("AA")) {
+				result = "无法记录错误内容的标签，请扫描商品盒子专用标签";
+				return result;
+			}
+			
+			if (boxTypeTmp.equals("AA")) {
+				result = "无法记录箱子专用标签，请扫描商品盒子专用标签";
+				return result;
+			}
+		}
+
+		return result;
+	}
+	
+	public static String checkPkgBigBoxTag(ArrayList<GoodBean> goodList, String tagContent, String serialID,
+			String goodsID, String boxType) {
+		String result = "SUCC";
+
+		if (tagContent.length() != 14) {
+			result = "无效的箱子专用标签，请联系管理员";
+			return result;
+		}
+		
+		String factoryTmp = tagContent.substring(0, 2);
+		String serialIDTmp = tagContent.substring(8, 10);
+		String goodsIDTmp = tagContent.substring(10, 12);
+		String boxTypeTmp = tagContent.substring(12);
+
+		if (!"CH".equals(factoryTmp)
+				|| !serialID.equals(serialIDTmp) || !goodsID.equals(goodsIDTmp)
+				|| !boxType.equals(boxTypeTmp)) {
+			result = "无效的箱子专用标签，请联系管理员";
+			return result;
+		}
+
+		if (!goodsID.equals(goodsIDTmp)) {
+			String goodsName = Helper.getGoodName(goodList, goodsID);
+			String goodsNameTmp = Helper.getGoodName(goodList, goodsIDTmp);
+			if (goodsName == null || "".equals(goodsName)) {
+				result = "无效的箱子专用标签，请联系管理员";
+				return result;
+			} else {
+				result = "该标签为" + goodsName + "商品专用标签，无法记录。请扫描" + goodsNameTmp + "商品专用标签";
+				return result;
+			}
+		}
+
+		return result;
+	}
+	
+	public static String checkDelBigBoxTag(String tagContent) {
+		String result = "SUCC";
+
+		if (tagContent.length() != 14) {
+			result = "无效的箱子专用标签，请联系管理员";
+			return result;
+		}
+		
+		String factoryTmp = tagContent.substring(0, 2);
+		String serialIDTmp = tagContent.substring(8, 10);
+		String goodsIDTmp = tagContent.substring(10, 12);
+		String boxTypeTmp = tagContent.substring(12);
+
+		if (!"CH".equals(factoryTmp)) {
+			result = "无法记录错误内容的标签，请扫描商品箱子专用标签";
+			return result;
+		}
+		
+		if ((!serialIDTmp.equals("A1") && !serialIDTmp.equals("A2")) || 
+			(!goodsIDTmp.equals("01") && !goodsIDTmp.equals("02") && !goodsIDTmp.equals("03") && !goodsIDTmp.equals("04")) || 
+			!boxTypeTmp.equals("AA")) {
+			result = "无法记录错误内容的标签，请扫描商品箱子专用标签";
+			return result;
+		}
+
+		return result;
 	}
 	
 	public static String checkBigBoxTag(String tagContent, String serialID,

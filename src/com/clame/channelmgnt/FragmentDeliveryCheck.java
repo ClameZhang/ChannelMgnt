@@ -53,6 +53,9 @@ public class FragmentDeliveryCheck extends Fragment {
 		if (container == null) {
 			return null;
 		}
+		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentDeliveryCheck");
 
 		Bundle bundle = getArguments();
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
@@ -110,6 +113,22 @@ public class FragmentDeliveryCheck extends Fragment {
 	}
 
 	public void update(String flagID, final String mCurrentContent) {
+		String isContentOK = Helper.checkDelBigBoxTag(mCurrentContent);
+
+		if (!"SUCC".equals(isContentOK)) {
+			new AlertDialog.Builder(FragmentDeliveryCheck.this.getActivity())
+					.setTitle("提示")
+					.setMessage(isContentOK)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).show();
+			return;
+		}
+		
 		String url = "py_r/2014";
 		JSONObject pkg = new JSONObject();
 		try {
@@ -187,6 +206,9 @@ public class FragmentDeliveryCheck extends Fragment {
 										userInfoList, sendID);
 								String recvName = Helper.getUserNameByID(
 										userInfoList, recvID);
+								if ("8".equals(recvID)) {
+									recvName = "消费者";
+								}
 								String goodName = Helper.getGoodName(goodList, goodID);
 
 								String info = tv_check_info.getText().toString();
@@ -196,7 +218,7 @@ public class FragmentDeliveryCheck extends Fragment {
 								tv_check_info.setText(info);
 								tv_check_info.setVisibility(View.VISIBLE);
 								
-								if (sendID.equals(userBean.getUserName())) {
+								if (recvID.equals(userBean.getUserName())) {
 									tv_check_status
 											.setText(getResources().getString(
 													R.string.fragment_scan_success));
@@ -210,6 +232,22 @@ public class FragmentDeliveryCheck extends Fragment {
 								return;
 							}
 						} catch (JSONException ex) {
+							String errStr = "非法的标签，请联系总部进行查证";
+							new AlertDialog.Builder(
+									FragmentDeliveryCheck.this
+											.getActivity())
+									.setTitle("提示")
+									.setMessage(errStr)
+									.setIcon(
+											android.R.drawable.ic_dialog_info)
+									.setPositiveButton(
+											"确定",
+											new DialogInterface.OnClickListener() {
+												public void onClick(
+														DialogInterface dialog,
+														int whichButton) {
+												}
+											}).show();
 							return;
 						}
 					}

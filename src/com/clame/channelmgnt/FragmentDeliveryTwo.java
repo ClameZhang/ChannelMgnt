@@ -53,6 +53,7 @@ public class FragmentDeliveryTwo extends Fragment {
 	Button btn_next;
 	String level;
 	String name;
+	String dname;
 	String userName;
 	String userLevel;
 	String SerialID; 
@@ -74,6 +75,7 @@ public class FragmentDeliveryTwo extends Fragment {
 		Bundle bundle = getArguments();
 		name = bundle.getString("name");
 		level = bundle.getString("level");
+		dname = bundle.getString("DNAME");
 		userName = bundle.getString("userName");
 		userLevel = bundle.getString("userLevel");
 		SerialID = bundle.getString("SerialID");
@@ -135,7 +137,7 @@ public class FragmentDeliveryTwo extends Fragment {
 
 		tv_msg = (TextView) layout.findViewById(R.id.tv_msg);
 		String msg = tv_msg.getText().toString();
-		msg = msg.replace("XXX", name);
+		msg = msg.replace("XXX", dname);
 		tv_msg.setText(msg);
 
 		spinner_goods = (Spinner) layout.findViewById(R.id.spinner_goods);

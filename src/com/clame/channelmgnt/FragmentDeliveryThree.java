@@ -72,6 +72,9 @@ public class FragmentDeliveryThree extends Fragment {
 		if (container == null) {
 			return null;
 		}
+		
+		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+		app.setFragmentname("FragmentDeliveryThree");
 
 		Bundle bundle = getArguments();
 		name = bundle.getString("name");

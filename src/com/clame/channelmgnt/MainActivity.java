@@ -45,6 +45,8 @@ public class MainActivity extends FragmentActivity {
 
 	int userAuth = 0;
 	int delAuth = 0;
+	
+	public String fragmentName;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -259,36 +261,41 @@ public class MainActivity extends FragmentActivity {
 
 			String mCurrentID = Helper.getNfcID(mfc.readPages(0),
 					mfc.readPages(1));
+
+			
+			final FragmentRecorder app = (FragmentRecorder)getApplication();
+			String fragmentName = app.getFragmentname();
 			
 			FragmentPackageTwo fp2 = (FragmentPackageTwo) getSupportFragmentManager()
 					.findFragmentByTag("FragmentPackageTwo");
-			if (fp2 != null) {
-				fp2.update(mCurrentID);
+			if (fp2 != null && fragmentName.equals("FragmentPackageTwo")) {
+				String mCurrentContent = Helper.getNfcContent(intent);
+				fp2.update(mCurrentID, mCurrentContent);
 			}
 
 			FragmentPackageThree fp3 = (FragmentPackageThree) getSupportFragmentManager()
 					.findFragmentByTag("FragmentPackageThree");
-			if (fp3 != null) {
+			if (fp3 != null && fragmentName.equals("FragmentPackageThree")) {
 				String mCurrentContent = Helper.getNfcContent(intent);
 				fp3.update(mCurrentID, mCurrentContent);
 			}
 
 			FragmentManagementCheck fc = (FragmentManagementCheck) getSupportFragmentManager()
 					.findFragmentByTag("FragmentManagementCheck");
-			if (fc != null) {
+			if (fc != null && fragmentName.equals("FragmentManagementCheck")) {
 				fc.update(mCurrentID);
 			}
 
 			FragmentDeliveryCheck fdc = (FragmentDeliveryCheck) getSupportFragmentManager()
 					.findFragmentByTag("FragmentDeliveryCheck");
-			if (fdc != null) {
+			if (fdc != null && fragmentName.equals("FragmentDeliveryCheck")) {
 				String mCurrentContent = Helper.getNfcContent(intent);
 				fdc.update(mCurrentID, mCurrentContent);
 			}
 
 			FragmentDeliveryThree fdt = (FragmentDeliveryThree) getSupportFragmentManager()
 					.findFragmentByTag("FragmentDeliveryThree");
-			if (fdt != null) {
+			if (fdt != null && fragmentName.equals("FragmentDeliveryThree")) {
 				String mCurrentContent = Helper.getNfcContent(intent);
 				fdt.update(mCurrentID, mCurrentContent);
 			}
