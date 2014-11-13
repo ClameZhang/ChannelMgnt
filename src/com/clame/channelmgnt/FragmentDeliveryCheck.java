@@ -230,6 +230,7 @@ public class FragmentDeliveryCheck extends Fragment {
 											.setText(getResources()
 													.getString(
 															R.string.fragment_scan_success));
+									tv_suggest.setVisibility(View.GONE);
 								} else {
 									tv_check_status
 											.setText(getResources()
