@@ -196,7 +196,8 @@ public class FragmentPackageHistory extends Fragment {
 											.nextValue();
 									// 接下来的就是JSON对象的操作了
 									String code = userObj.getString("code");											
-									JSONArray msgArray = userObj.getJSONArray("msg");									
+									JSONArray msgArray = userObj.getJSONArray("msg");
+									packageHistoryBean.clear();								
 									for(int i = 0; i < msgArray.length(); i++) {
 						                JSONObject oj = msgArray.getJSONObject(i);
 										PackageHistoryBean historyBean = new PackageHistoryBean();

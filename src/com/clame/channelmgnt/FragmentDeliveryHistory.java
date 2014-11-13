@@ -206,6 +206,7 @@ public class FragmentDeliveryHistory extends Fragment {
 									String code = userObj.getString("code");
 									JSONArray msgArray = userObj
 											.getJSONArray("msg");
+									deliveryHistoryBean.clear();
 									for (int i = 0; i < msgArray.length(); i++) {
 										JSONObject oj = msgArray
 												.getJSONObject(i);
@@ -216,6 +217,9 @@ public class FragmentDeliveryHistory extends Fragment {
 										String recvName = Helper
 												.getUserNameByID(userInfoList,
 														recvID);
+										if ("8".equals(recvID)) {
+											recvName = "Ïû·ÑÕß";
+										}
 										String goodID = oj.getString("alname");
 										String goodName = Helper.getGoodName(
 												goodList, goodID);

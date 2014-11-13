@@ -53,8 +53,9 @@ public class FragmentDeliveryCheck extends Fragment {
 		if (container == null) {
 			return null;
 		}
-		
-		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+
+		final FragmentRecorder app = (FragmentRecorder) this.getActivity()
+				.getApplication();
 		app.setFragmentname("FragmentDeliveryCheck");
 
 		Bundle bundle = getArguments();
@@ -128,7 +129,7 @@ public class FragmentDeliveryCheck extends Fragment {
 							}).show();
 			return;
 		}
-		
+
 		String url = "py_r/2014";
 		JSONObject pkg = new JSONObject();
 		try {
@@ -175,10 +176,12 @@ public class FragmentDeliveryCheck extends Fragment {
 									.nextValue();
 							// 接下来的就是JSON对象的操作了
 							String code = userObj.getString("code");
-							JSONObject msg = userObj.getJSONObject("msg");
 
 							if (code.equals(RequestAPIClient.STATUS_FAIL)) {
-								String errStr = "非法的标签，请联系总部进行查证";
+								String errStr = userObj.getString("msg");
+								if ("".equals(errStr)) {
+									errStr = "非法的标签，请联系总部进行查证";
+								}
 								new AlertDialog.Builder(
 										FragmentDeliveryCheck.this
 												.getActivity())
@@ -196,11 +199,12 @@ public class FragmentDeliveryCheck extends Fragment {
 												}).show();
 								return;
 							} else {
+								JSONObject msg = userObj.getJSONObject("msg");
 								// {"recv_lid":"5","recv_name":"1","alname":"01","dist_time":"2014-11-10T16:51:12.000Z","par_id":"0442d37abe3480","send_lid":"2","send_name":"97"}
 								String sendID = msg.getString("send_name");
 								String recvID = msg.getString("recv_name");
-								String goodID = mCurrentContent
-										.substring(10, 12);
+								String goodID = mCurrentContent.substring(10,
+										12);
 
 								String sendName = Helper.getUserNameByID(
 										userInfoList, sendID);
@@ -209,37 +213,57 @@ public class FragmentDeliveryCheck extends Fragment {
 								if ("8".equals(recvID)) {
 									recvName = "消费者";
 								}
-								String goodName = Helper.getGoodName(goodList, goodID);
+								String goodName = Helper.getGoodName(goodList,
+										goodID);
 
-								String info = tv_check_info.getText().toString();
+								String info = tv_check_info.getText()
+										.toString();
 								info = info.replace("XX", goodName);
 								info = info.replace("AA", sendName);
 								info = info.replace("BB", recvName);
 								tv_check_info.setText(info);
 								tv_check_info.setVisibility(View.VISIBLE);
-								
+
+								String succStr = "验货成功";
 								if (recvID.equals(userBean.getUserName())) {
 									tv_check_status
-											.setText(getResources().getString(
-													R.string.fragment_scan_success));
+											.setText(getResources()
+													.getString(
+															R.string.fragment_scan_success));
 								} else {
 									tv_check_status
-									.setText(getResources().getString(
-											R.string.fragment_scan_fail));
+											.setText(getResources()
+													.getString(
+															R.string.fragment_scan_fail));
 									tv_suggest.setVisibility(View.VISIBLE);
+									succStr = "验货失败";
 								}
 								
+								new AlertDialog.Builder(
+										FragmentDeliveryCheck.this
+												.getActivity())
+										.setTitle("提示")
+										.setMessage(succStr)
+										.setIcon(
+												android.R.drawable.ic_dialog_info)
+										.setPositiveButton(
+												"确定",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int whichButton) {
+													}
+												}).show();
+
 								return;
 							}
 						} catch (JSONException ex) {
 							String errStr = "非法的标签，请联系总部进行查证";
-							new AlertDialog.Builder(
-									FragmentDeliveryCheck.this
-											.getActivity())
+							new AlertDialog.Builder(FragmentDeliveryCheck.this
+									.getActivity())
 									.setTitle("提示")
 									.setMessage(errStr)
-									.setIcon(
-											android.R.drawable.ic_dialog_info)
+									.setIcon(android.R.drawable.ic_dialog_info)
 									.setPositiveButton(
 											"确定",
 											new DialogInterface.OnClickListener() {
