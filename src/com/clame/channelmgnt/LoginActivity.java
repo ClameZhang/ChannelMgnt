@@ -198,6 +198,7 @@ public class LoginActivity extends Activity {
 										String serialID = beanObj
 												.getString("s_id");
 										userBean.setuLevel(uLevel);
+										userBean.setuLevel("0");
 										userBean.setSerialID(serialID);
 
 										Intent mainIntent = new Intent(

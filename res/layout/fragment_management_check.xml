@@ -56,57 +56,64 @@
             android:textSize="19sp"
             android:textStyle="bold" />
 
-	    <RelativeLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="40dp"
-	        android:gravity="center|center_vertical"
-	        android:orientation="vertical" >
-	
-	        <TextView
-	            android:id="@+id/tv_check_status"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="40dp"
-	            android:gravity="center"
-	            android:layout_centerInParent="true"
-	            android:text="@string/fragment_unscan"
-	            android:textColor="#000000"
-	            android:textSize="45sp"
-	            android:textStyle="bold" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center|center_vertical"
+            android:orientation="vertical" >
 
-		    <LinearLayout
-		        android:id="@+id/ll_check_info"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="70dp"
-	            android:layout_centerInParent="true"
-		        android:gravity="center|center_vertical"
-		        android:orientation="vertical" >
-		
-		        <TextView
-		            android:id="@+id/tv_check_info_title"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginTop="10dp"
-		            android:gravity="center"
-		            android:text="@string/fragment_mgnt_check_info_title"
-		            android:textColor="#000000"
-		            android:textSize="19sp"
-		            android:textStyle="bold" />
-		
-		        <TextView
-		            android:id="@+id/tv_check_info"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginTop="40dp"
-		            android:gravity="center"
-		            android:text="@string/fragment_del_check_info"
-		            android:textColor="#000000"
-		            android:textSize="19sp"
-		            android:textStyle="bold" />
-	    	</LinearLayout>
-	    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_check_status"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="@string/fragment_unscan"
+                android:textColor="#000000"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/ll_check_info"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_check_status"
+                android:gravity="center|center_vertical"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_check_info_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/fragment_mgnt_check_info_title"
+                    android:textColor="#000000"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_check_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/fragment_mgnt_check_info_id"
+                    android:textColor="#000000"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_show_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/fragment_commit_detail"
+                    android:textColor="#000000"
+                    android:textSize="19sp" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

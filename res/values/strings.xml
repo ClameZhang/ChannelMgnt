@@ -39,6 +39,7 @@
     <string name="fragment_scan_fail">验证失败</string>
     <string name="fragment_commit">提交装箱信息</string>
     <string name="fragment_commit_del">提交发货信息</string>
+    <string name="fragment_commit_detail">查看详情</string>
     
     <string name="fragment_pkg_step1">请选择装箱商品</string>
     <string name="fragment_pkg_step2">“XX”商品\n每箱需装AA盒\n请继续扫描商品盒NFC标签\n重复盒子不会累计</string>
@@ -64,6 +65,7 @@
     
     <string name="fragment_mgnt_info">请扫描NFC标签查看发货链</string>
     <string name="fragment_mgnt_check_info_title">本商品为XX</string>
+    <string name="fragment_mgnt_check_info_id">防伪ID：NNN</string>
     
     <string name="fragment_history_start">开始时间</string>
     <string name="fragment_history_end">结束时间</string>
