@@ -3,6 +3,9 @@ package com.clame.channelmgnt;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.bean.ManagementChainBean;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,8 +36,7 @@ public class FragmentManagementHistoryResultDetail extends Fragment {
 	ImageView iv_return;
 	ImageView iv_user;
 	TextView tv_title;
-	DatePicker dp_start;
-	DatePicker dp_end;
+	ArrayList<ManagementChainBean> mgntChainList = new ArrayList<ManagementChainBean>();
 
 	public FragmentManagementHistoryResultDetail() {
 	}
@@ -45,10 +47,9 @@ public class FragmentManagementHistoryResultDetail extends Fragment {
 		if (container == null) {
 			return null;
 		}
-		
+
 		Bundle bundle = getArguments();
-		String start = bundle.getString("start");
-		String end = bundle.getString("end");
+		mgntChainList = (ArrayList<ManagementChainBean>) bundle.getSerializable("CHAINBEANs");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

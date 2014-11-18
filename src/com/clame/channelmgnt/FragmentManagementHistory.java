@@ -15,6 +15,8 @@ import org.json.JSONTokener;
 
 import com.clame.channelmgnt.bean.DeliveryHistoryBean;
 import com.clame.channelmgnt.bean.GoodBean;
+import com.clame.channelmgnt.bean.LevelBean;
+import com.clame.channelmgnt.bean.ManagementHistoryBean;
 import com.clame.channelmgnt.bean.UserBean;
 import com.clame.channelmgnt.bean.UserInfoBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
@@ -56,7 +58,8 @@ public class FragmentManagementHistory extends Fragment {
 	UserBean userBean;
 	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
-	ArrayList<DeliveryHistoryBean> deliveryHistoryBean = new ArrayList<DeliveryHistoryBean>();
+	ArrayList<ManagementHistoryBean> managementHistoryList = new ArrayList<ManagementHistoryBean>();
+	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 
 	public FragmentManagementHistory() {
 	}
@@ -72,6 +75,7 @@ public class FragmentManagementHistory extends Fragment {
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
 		userInfoList = (ArrayList<UserInfoBean>) bundle
 				.getSerializable("USERINFOBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LEVELBEANS");
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 
 		LayoutInflater myInflater = (LayoutInflater) getActivity()
@@ -84,7 +88,8 @@ public class FragmentManagementHistory extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new AlertDialog.Builder(FragmentManagementHistory.this.getActivity())
+				new AlertDialog.Builder(FragmentManagementHistory.this
+						.getActivity())
 						.setTitle("提示")
 						.setMessage("确定退出?")
 						.setIcon(R.drawable.ic_return)
@@ -92,10 +97,10 @@ public class FragmentManagementHistory extends Fragment {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int whichButton) {
-										FragmentManagementHistory.this.getActivity()
-												.setResult(-1);// 确定按钮事件
-										FragmentManagementHistory.this.getActivity()
-												.finish();
+										FragmentManagementHistory.this
+												.getActivity().setResult(-1);// 确定按钮事件
+										FragmentManagementHistory.this
+												.getActivity().finish();
 									}
 								})
 						.setNegativeButton("取消",
@@ -110,21 +115,21 @@ public class FragmentManagementHistory extends Fragment {
 
 		tv_title = (TextView) layout.findViewById(R.id.tv_title);
 		tv_title.setText(getResources().getText(R.string.main_title_history));
-		
+
 		final Calendar now = Calendar.getInstance();
 		int mYear = now.get(Calendar.YEAR);
 		int mMonth = now.get(Calendar.MONTH);
 		int mDay = now.get(Calendar.DAY_OF_MONTH);
-		
+
 		dp_start = (DatePicker) layout.findViewById(R.id.dp_start);
 		dp_start.init(mYear, mMonth, mDay, null);
-		
+
 		dp_end = (DatePicker) layout.findViewById(R.id.dp_end);
 		dp_end.init(mYear, mMonth, mDay, null);
-		
+
 		btn_search = (Button) layout.findViewById(R.id.btn_search);
 		btn_search.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -136,7 +141,7 @@ public class FragmentManagementHistory extends Fragment {
 				String startStr = String.valueOf(yearStart) + "-"
 						+ String.valueOf(monthStart) + "-"
 						+ String.valueOf(dayStart) + " 00:00:00";
-				
+
 				int dayEnd = dp_end.getDayOfMonth();
 				int monthEnd = dp_end.getMonth() + 1;
 				int yearEnd = dp_end.getYear();
@@ -145,23 +150,27 @@ public class FragmentManagementHistory extends Fragment {
 				String endStr = String.valueOf(yearEnd) + "-"
 						+ String.valueOf(monthEnd) + "-"
 						+ String.valueOf(dayEnd) + " 23:59:59";
-				
+
 				if (start.compareTo(end) > 0) {
-					new AlertDialog.Builder(FragmentManagementHistory.this.getActivity())
-					.setTitle("错误")
-					.setMessage("开始时间不能大于结束时间！")
-					.setIcon(android.R.drawable.ic_secure)
-					.setPositiveButton("确定",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {}
-							}).show();
+					new AlertDialog.Builder(FragmentManagementHistory.this
+							.getActivity())
+							.setTitle("错误")
+							.setMessage("开始时间不能大于结束时间！")
+							.setIcon(android.R.drawable.ic_secure)
+							.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton) {
+										}
+									}).show();
 					return;
 				}
 
 				String url = "py_r/2010";
 				JSONObject del = new JSONObject();
 				try {
+					del.put("username", userBean.getUserName());
 					del.put("stime", startStr);
 					del.put("etime", endStr);
 				} catch (JSONException e1) {
@@ -208,20 +217,17 @@ public class FragmentManagementHistory extends Fragment {
 									for (int i = 0; i < msgArray.length(); i++) {
 										JSONObject oj = msgArray
 												.getJSONObject(i);
-										DeliveryHistoryBean historyBean = new DeliveryHistoryBean();
-										String time = oj.getString("dist_time");
-										String recvID = oj
-												.getString("recv_name");
-										String recvName = Helper
-												.getUserNameByID(userInfoList,
-														recvID);
-										String goodID = oj.getString("alname");
-										String goodName = Helper.getGoodName(
-												goodList, goodID);
+										ManagementHistoryBean historyBean = new ManagementHistoryBean();
+
+										// {"client_ip":"999","client_ua":"undefined","type":"ADMINCHECK","qrcode":"NULL","nfc":"048fcbfa463d80","verify_at":"2014-11-13T00:08:09.000Z","result":"SUCC"}
+
+										String time = oj.getString("verify_at");
+										String nfcID = oj.getString("nfc");
+										String goodName = oj.getString("nfc");
 										historyBean.setTime(time);
-										historyBean.setName(goodName);
-										historyBean.setRecvName(recvName);
-										deliveryHistoryBean.add(historyBean);
+										historyBean.setGoodName(goodName);
+										historyBean.setNfc(nfcID);
+										managementHistoryList.add(historyBean);
 									}
 
 									if (code.equals(RequestAPIClient.STATUS_FAIL)) {
@@ -246,16 +252,27 @@ public class FragmentManagementHistory extends Fragment {
 										Bundle bundle = new Bundle();
 
 										ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-										for (int i = 0; i < deliveryHistoryBean.size(); i++) {
+										for (int i = 0; i < managementHistoryList
+												.size(); i++) {
 											Map<String, Object> map = new HashMap<String, Object>();
-											String time = deliveryHistoryBean.get(i).getTime();
-											time = time.substring(0, 10) + " " + time.substring(11, 19);
-											map.put("tv_date", "发货时间：" + time);
-											map.put("tv_good", "商品：" + deliveryHistoryBean.get(i).getName());
+											String time = managementHistoryList
+													.get(i).getTime();
+											time = time.substring(0, 10) + " "
+													+ time.substring(11, 19);
+											map.put("tv_date", "验货时间：" + time);
+											map.put("tv_good", "商品："
+													+ managementHistoryList
+															.get(i).getGoodName());
+											map.put("tv_nfc", managementHistoryList.get(i).getNfc());
 											list.add(map);
 										}
 										bundle.putSerializable("historylist",
 												list);
+										bundle.putSerializable("USERBEAN", userBean);
+										bundle.putSerializable("LEVELBEANS",
+												levelList);
+										bundle.putSerializable("USERINFOBEANS",
+												userInfoList);
 
 										FragmentManagementHistoryResult fHistoryResult = new FragmentManagementHistoryResult();
 										FragmentManager fm = getFragmentManager();

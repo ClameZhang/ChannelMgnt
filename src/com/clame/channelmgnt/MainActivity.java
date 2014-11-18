@@ -57,8 +57,8 @@ public class MainActivity extends FragmentActivity {
 		Bundle bundle = getIntent().getBundleExtra("BUNDLE");
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
-		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
-		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LIMITBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LEVELBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
 		userInfoList = (ArrayList<UserInfoBean>) bundle

@@ -81,8 +81,8 @@ public class FragmentDeliveryOne extends Fragment {
 		Bundle bundle = getArguments();
 		userBean = (UserBean) bundle.getSerializable("USERBEAN");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
-		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
-		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LIMITBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LEVELBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
 		userInfoList = (ArrayList<UserInfoBean>) bundle

@@ -80,8 +80,8 @@ public class FragmentDeliveryTwo extends Fragment {
 		userLevel = bundle.getString("userLevel");
 		SerialID = bundle.getString("SerialID");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
-		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
-		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LIMITBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LEVELBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
 

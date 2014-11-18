@@ -85,8 +85,8 @@ public class FragmentDeliveryThree extends Fragment {
 		goodName = bundle.getString("goodName");
 		SerialID = bundle.getString("SerialID");
 		goodList = (ArrayList<GoodBean>) bundle.getSerializable("GOODBEANS");
-		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LEVELBEANS");
-		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LIMITBEANS");
+		limitList = (ArrayList<LimitBean>) bundle.getSerializable("LIMITBEANS");
+		levelList = (ArrayList<LevelBean>) bundle.getSerializable("LEVELBEANS");
 		serialList = (ArrayList<SerialBean>) bundle
 				.getSerializable("SERIALBEANS");
 		goodID = Helper.getGoodID(goodList, goodName);
