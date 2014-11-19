@@ -131,9 +131,45 @@ public class FragmentManagementCheck extends Fragment {
 				while(!isJump) {
 					continue;
 				}
+
+				ArrayList<ManagementChainBean> mgntChainListFinal = new ArrayList<ManagementChainBean>();
+				for (int i = 2; i < 8; i++) {
+					boolean isMatch = false;
+					for (int j = 0; j < mgntChainList.size(); j++) {
+						if (mgntChainList.get(j).getSendLID().equals(String.valueOf(i))) {
+							mgntChainListFinal.add(mgntChainList.get(j));
+							isMatch = true;
+							break;
+						}
+					}
+					if (!isMatch) {
+						ManagementChainBean bean = new ManagementChainBean();
+						bean.setIsEmpty(true);
+						bean.setSendLID(String.valueOf(i));
+						mgntChainListFinal.add(bean);
+					}
+				}
+				
+				ManagementChainBean lastSendBean = new ManagementChainBean();
+				for (int k = 0; k < mgntChainListFinal.size(); k++) {
+					if (!mgntChainListFinal.get(k).isEmpty) {
+						lastSendBean = mgntChainListFinal.get(k);
+					}
+				}
+				
+				int lastRecvLid = Integer.parseInt(lastSendBean.getRecvLID());
+				mgntChainListFinal.get(lastRecvLid - 2).setIsEmpty(false);
+				mgntChainListFinal.get(lastRecvLid - 2).setSendID(lastSendBean.getRecvID());
+				mgntChainListFinal.get(lastRecvLid - 2).setSendLID(lastSendBean.getRecvLID());
+				mgntChainListFinal.get(lastRecvLid - 2).setSendName(lastSendBean.getRecvName());
+				mgntChainListFinal.get(lastRecvLid - 2).setSendLName(lastSendBean.getRecvLName());
+
+				for (int l = mgntChainListFinal.size() - 1; l > lastRecvLid - 2; l--) {
+					mgntChainListFinal.remove(mgntChainListFinal.size() - 1);
+				}				
 				
 				Bundle bundle = new Bundle();
-				bundle.putSerializable("CHAINBEANs", mgntChainList);
+				bundle.putSerializable("CHAINBEANs", mgntChainListFinal);
 
 				FragmentManagementHistoryResultDetail fResult = new FragmentManagementHistoryResultDetail();
 				FragmentManager fm = getFragmentManager();

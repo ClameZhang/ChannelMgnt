@@ -128,6 +128,7 @@ public class MainActivity extends FragmentActivity {
 		if (userAuth == 0) {
 			llPackage.setVisibility(View.GONE);
 			llDelivery.setVisibility(View.GONE);
+			llManagement.setVisibility(View.GONE);
 		} else if (userAuth == 1) {
 			llManagement.setVisibility(View.GONE);
 			llDelivery.setVisibility(View.GONE);

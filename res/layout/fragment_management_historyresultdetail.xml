@@ -41,13 +41,27 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/rl_header"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center|center_vertical"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
-        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:scaleType="fitXY"
+            android:src="@drawable/arrow" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1"
+            android:gravity="center|center_vertical"
+            android:orientation="vertical" >
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -10,12 +10,6 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/main_bottom_bar" />
 
-    <com.clame.channelmgnt.widgets.BottomBarDelivery
-        android:id="@+id/main_bottom_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="50dip"
-        android:layout_alignParentBottom="true" />
-
     <RelativeLayout
         android:id="@+id/ll_bottom_bar_package"
         android:layout_width="fill_parent"

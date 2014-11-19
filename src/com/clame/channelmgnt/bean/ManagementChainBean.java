@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ManagementChainBean implements Serializable {
 	private static final long serialVersionUID = 4226755799531293257L;
 
+	public boolean isEmpty;
 	public String time;
 	public String sendLID;
 	public String sendID;
@@ -14,6 +15,21 @@ public class ManagementChainBean implements Serializable {
 	public String recvID;
 	public String recvLName;
 	public String recvName;
+
+	
+	
+	public ManagementChainBean() {
+		super();
+		isEmpty = false;
+	}
+
+	public boolean getIsEmpty() {
+		return isEmpty;
+	}
+
+	public void setIsEmpty(boolean isEmpty) {
+		this.isEmpty = isEmpty;
+	}
 
 	public String getTime() {
 		return time;
