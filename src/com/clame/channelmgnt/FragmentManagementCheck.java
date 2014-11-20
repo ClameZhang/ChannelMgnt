@@ -132,6 +132,7 @@ public class FragmentManagementCheck extends Fragment {
 					continue;
 				}
 
+				isJump = false;
 				ArrayList<ManagementChainBean> mgntChainListFinal = new ArrayList<ManagementChainBean>();
 				for (int i = 2; i < 8; i++) {
 					boolean isMatch = false;
@@ -166,7 +167,19 @@ public class FragmentManagementCheck extends Fragment {
 
 				for (int l = mgntChainListFinal.size() - 1; l > lastRecvLid - 2; l--) {
 					mgntChainListFinal.remove(mgntChainListFinal.size() - 1);
-				}				
+				}
+				
+				for (int m = mgntChainListFinal.size() - 1; m >= 0; m--) {
+					ManagementChainBean tmpBean = mgntChainListFinal.get(m);
+					if (tmpBean.isEmpty) {
+						ManagementChainBean tmpBeanChild = mgntChainListFinal.get(m + 1);
+						String childUid = tmpBeanChild.getSendID();
+					}
+				}
+				
+				while(!isJump) {
+					continue;
+				}
 				
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("CHAINBEANs", mgntChainListFinal);
