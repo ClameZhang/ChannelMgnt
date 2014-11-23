@@ -49,8 +49,17 @@
         <ListView
             android:id="@+id/list_history"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="match_parent"
+            android:footerDividersEnabled="true" >
         </ListView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="---------------已到最后一行---------------"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

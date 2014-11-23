@@ -53,8 +53,9 @@ public class FragmentManagementCheck extends Fragment {
 	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
 	ArrayList<UserInfoBean> userInfoList = new ArrayList<UserInfoBean>();
 	ArrayList<ManagementChainBean> mgntChainList = new ArrayList<ManagementChainBean>();
+	ArrayList<ManagementChainBean> mgntChainListFinal = new ArrayList<ManagementChainBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
-	boolean isJump = false;
+	ManagementChainBean tmpBean;
 
 	public FragmentManagementCheck() {
 	}
@@ -122,18 +123,14 @@ public class FragmentManagementCheck extends Fragment {
 				.findViewById(R.id.tv_check_info_title);
 		tv_check_info = (TextView) layout.findViewById(R.id.tv_check_info);
 		btn_show_detail = (Button) layout.findViewById(R.id.btn_show_detail);
-
+		btn_show_detail.setVisibility(View.GONE);
 		btn_show_detail.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				while(!isJump) {
-					continue;
-				}
+				mgntChainListFinal.clear();
 
-				isJump = false;
-				ArrayList<ManagementChainBean> mgntChainListFinal = new ArrayList<ManagementChainBean>();
 				for (int i = 2; i < 8; i++) {
 					boolean isMatch = false;
 					for (int j = 0; j < mgntChainList.size(); j++) {
@@ -169,28 +166,176 @@ public class FragmentManagementCheck extends Fragment {
 					mgntChainListFinal.remove(mgntChainListFinal.size() - 1);
 				}
 				
-				for (int m = mgntChainListFinal.size() - 1; m >= 0; m--) {
-					ManagementChainBean tmpBean = mgntChainListFinal.get(m);
-					if (tmpBean.isEmpty) {
-						ManagementChainBean tmpBeanChild = mgntChainListFinal.get(m + 1);
-						String childUid = tmpBeanChild.getSendID();
+				boolean isJump = true;
+				for (int z = 0; z < mgntChainListFinal.size(); z++) {
+					if (mgntChainListFinal.get(z).isEmpty) {
+						isJump = false;
+						break;
 					}
 				}
 				
-				while(!isJump) {
-					continue;
-				}
-				
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("CHAINBEANs", mgntChainListFinal);
+				if (isJump) {													
+					Bundle bundle = new Bundle();
+					bundle.putSerializable("CHAINBEANs", mgntChainListFinal);
 
-				FragmentManagementHistoryResultDetail fResult = new FragmentManagementHistoryResultDetail();
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction tx = fm.beginTransaction();
-				fResult.setArguments(bundle);
-				tx.add(R.id.main_details, fResult);
-				tx.addToBackStack(null);
-				tx.commit();
+					FragmentManagementHistoryResultDetail fResult = new FragmentManagementHistoryResultDetail();
+					FragmentManager fm = getFragmentManager();
+					FragmentTransaction tx = fm.beginTransaction();
+					fResult.setArguments(bundle);
+					tx.add(R.id.main_details, fResult);
+					tx.addToBackStack(null);
+					tx.commit();
+				}
+
+				String url = "py_r/2006";
+				JSONObject userObj = new JSONObject();
+				StringEntity entity = null;
+				
+				for (int m = mgntChainListFinal.size() - 1; m >= 0; m--) {
+					tmpBean = mgntChainListFinal.get(m);
+					
+					if (tmpBean.isEmpty) {
+						ManagementChainBean tmpBeanChild = mgntChainListFinal.get(m + 1);
+						String sendID = tmpBeanChild.getSendID();
+
+						try {
+							userObj.put("username", sendID);
+						} catch (JSONException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						try {
+							entity = new StringEntity(userObj.toString());
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						RequestAPIClient.post(FragmentManagementCheck.this.getActivity(),
+								url, entity, new AsyncHttpResponseHandler() {
+
+									@Override
+									public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+											Throwable arg3) {
+										String errStr = "请求服务器失败";
+										new AlertDialog.Builder(FragmentManagementCheck.this
+												.getActivity())
+												.setTitle("提示")
+												.setMessage(errStr)
+												.setIcon(android.R.drawable.ic_dialog_info)
+												.setPositiveButton("确定",
+														new DialogInterface.OnClickListener() {
+															public void onClick(
+																	DialogInterface dialog,
+																	int whichButton) {
+															}
+														}).show();
+										return;
+									}
+
+									@Override
+									public void onSuccess(int arg0, Header[] arg1,
+											byte[] response) {
+										if (response == null) {
+											return;
+										}
+
+										String responseStr = "";
+										try {
+											responseStr = new String(response, "UTF-8");
+										} catch (UnsupportedEncodingException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+											return;
+										}
+
+										try {
+											JSONTokener jsonParser = new JSONTokener(
+													responseStr);
+											JSONObject userObj = (JSONObject) jsonParser
+													.nextValue();
+											// 接下来的就是JSON对象的操作了
+											String code = userObj.getString("code");
+
+											if (code.equals(RequestAPIClient.STATUS_FAIL)) {
+												String errStr = "请求服务器失败";
+												new AlertDialog.Builder(
+														FragmentManagementCheck.this
+																.getActivity())
+														.setTitle("提示")
+														.setMessage(errStr)
+														.setIcon(
+																android.R.drawable.ic_dialog_info)
+														.setPositiveButton(
+																"确定",
+																new DialogInterface.OnClickListener() {
+																	public void onClick(
+																			DialogInterface dialog,
+																			int whichButton) {
+																	}
+																}).show();
+												return;
+											} else {
+												JSONArray msgArray = userObj.getJSONArray("msg");
+												JSONObject msgObj = (JSONObject) msgArray.get(0);
+
+												String sendID = msgObj.getString("up_name");
+												String sendLID = msgObj.getString("up_id");
+												String sendName = Helper.getUserNameByID(userInfoList, sendID);
+												String sendLName = Helper.getLevelName(levelList, sendLID);										     
+												
+												boolean isJump = true;
+												for (int i = 0; i < mgntChainListFinal.size(); i++) {
+													if (mgntChainListFinal.get(i).getSendLID().equals(sendLID)) {
+														mgntChainListFinal.get(i).setIsEmpty(false);
+														mgntChainListFinal.get(i).setSendID(sendID);
+														mgntChainListFinal.get(i).setSendLID(sendLID);
+														mgntChainListFinal.get(i).setSendName(sendName);
+														mgntChainListFinal.get(i).setSendLName(sendLName);	
+													}
+													
+													if (mgntChainListFinal.get(i).isEmpty && i != mgntChainListFinal.size() - 1) {
+														isJump = false;
+														break;
+													}
+												}
+												
+												if (isJump) {													
+													Bundle bundle = new Bundle();
+													bundle.putSerializable("CHAINBEANs", mgntChainListFinal);
+
+													FragmentManagementHistoryResultDetail fResult = new FragmentManagementHistoryResultDetail();
+													FragmentManager fm = getFragmentManager();
+													FragmentTransaction tx = fm.beginTransaction();
+													fResult.setArguments(bundle);
+													tx.add(R.id.main_details, fResult);
+													tx.addToBackStack(null);
+													tx.commit();
+												}
+											}
+										} catch (JSONException ex) {
+											String errStr = "请求服务器失败";
+											new AlertDialog.Builder(
+													FragmentManagementCheck.this
+															.getActivity())
+													.setTitle("提示")
+													.setMessage(errStr)
+													.setIcon(android.R.drawable.ic_dialog_info)
+													.setPositiveButton(
+															"确定",
+															new DialogInterface.OnClickListener() {
+																public void onClick(
+																		DialogInterface dialog,
+																		int whichButton) {
+																}
+															}).show();
+											return;
+										}
+									}
+								});
+					}
+				}
 			}
 		});
 
@@ -205,8 +350,8 @@ public class FragmentManagementCheck extends Fragment {
 	public void update(String flagID, String mCurrentContent) {
 		boolean isFail = false;
 		String goodName = "";
-
-		String flagIDStr = "048FCBFA463D80";
+		
+		mgntChainList.clear();
 
 		String checkResult = Helper.checkDelBigBoxTag(mCurrentContent);
 		if (!checkResult.equals("SUCC")) {
@@ -251,26 +396,30 @@ public class FragmentManagementCheck extends Fragment {
 
 		String checkInfoTitle = getResources().getString(
 				R.string.fragment_mgnt_check_info_title);
+		btn_show_detail.setVisibility(View.GONE);
 		if (isFail) {
 			checkInfoTitle = "无效的箱子专用标签";
-			btn_show_detail.setVisibility(View.GONE);
 		} else {
 			checkInfoTitle = checkInfoTitle.replace("XX", goodName);
-			btn_show_detail.setVisibility(View.VISIBLE);
 		}
 		tv_check_info_title.setText(checkInfoTitle);
 
 		String checkInfo = getResources().getString(
 				R.string.fragment_mgnt_check_info_id);
-		checkInfo = checkInfo.replace("NN", flagID);
+		checkInfo = checkInfo.replace("NN", flagID.toUpperCase());
 		tv_check_info.setText(checkInfo);
+		
+		if (isFail) {
+			return;
+		}
+		
 		String url = "py_r/2018";
 		JSONObject pkg = new JSONObject();
 		try {
 			pkg.put("username", userBean.getUserName());
 			pkg.put("stime", "2014-01-01 12:00:00");
 			pkg.put("etime", "9999-11-30 12:00:00");
-			pkg.put("par_id", flagIDStr);
+			pkg.put("par_id", flagID);
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -358,7 +507,22 @@ public class FragmentManagementCheck extends Fragment {
 									chainBean.setRecvLName(recvLName);
 									chainBean.setRecvName(recvName);
 									mgntChainList.add(chainBean);
-									isJump = true;
+								}
+								
+								if (mgntChainList.size() == 0) {
+									new AlertDialog.Builder(FragmentManagementCheck.this.getActivity())
+									.setTitle("提示")
+									.setMessage("此箱无发货记录")
+									.setIcon(R.drawable.ic_return)
+									.setPositiveButton("确定",
+											new DialogInterface.OnClickListener() {
+												public void onClick(DialogInterface dialog,
+														int whichButton) {
+												}
+											}).show();
+								} else {
+									btn_show_detail.setVisibility(View.VISIBLE);
+									btn_show_detail.setEnabled(true);
 								}
 							}
 						} catch (JSONException ex) {

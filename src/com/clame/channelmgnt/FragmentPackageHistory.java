@@ -204,8 +204,10 @@ public class FragmentPackageHistory extends Fragment {
 										String time = oj.getString("pack_time");
 										String goodID = oj.getString("prdname");
 										String goodName = Helper.getGoodName(goodList, goodID);
+										String nfcID = oj.getString("par_id");
 										historyBean.setTime(time);
 										historyBean.setName(goodName);
+										historyBean.setNfcID(nfcID);
 										packageHistoryBean.add(historyBean);
 						            }
 
@@ -236,7 +238,7 @@ public class FragmentPackageHistory extends Fragment {
 											String time = packageHistoryBean.get(i).getTime();
 											time = time.substring(0, 10) + " " + time.substring(11, 19);
 											map.put("tv_date", "装箱时间：" + time);
-											map.put("tv_good", "商品：" + packageHistoryBean.get(i).getName());
+											map.put("tv_good", "商品：" + packageHistoryBean.get(i).getName() + "  (NFC_ID:" + packageHistoryBean.get(i).getNfcID() + ")");
 											list.add(map);
 										}
 										bundle.putSerializable("historylist",

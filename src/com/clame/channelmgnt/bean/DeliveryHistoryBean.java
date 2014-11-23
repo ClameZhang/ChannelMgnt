@@ -8,6 +8,7 @@ public class DeliveryHistoryBean implements Serializable {
 	public String time;
 	public String name;
 	public String recvName;
+	public String nfcID;
 
 	public String getTime() {
 		return time;
@@ -31,5 +32,13 @@ public class DeliveryHistoryBean implements Serializable {
 
 	public void setRecvName(String recvName) {
 		this.recvName = recvName;
+	}
+
+	public String getNfcID() {
+		return nfcID;
+	}
+
+	public void setNfcID(String nfcID) {
+		this.nfcID = nfcID;
 	}
 }

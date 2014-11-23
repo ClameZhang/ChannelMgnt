@@ -20,9 +20,9 @@ import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import android.R.id;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,8 +53,16 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
+		SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+		String name_str = remdname.getString("name", "");
+		String pass_str = remdname.getString("pass", "");
+
 		userName = (EditText) findViewById(R.id.tv_content_name);
+		userName.setText(name_str);
+
 		password = (EditText) findViewById(R.id.tv_content_password);
+		password.setText(pass_str);
+
 		errorInfo = (TextView) findViewById(R.id.tv_content_errorinfo);
 		btnLogin = (Button) findViewById(R.id.btn_login);
 
@@ -116,6 +124,12 @@ public class LoginActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
+				SharedPreferences.Editor edit = remdname.edit();
+				edit.putString("name", userName.getText().toString());
+				edit.putString("pass", password.getText().toString());
+				edit.commit();
 
 				RequestAPIClient.post(LoginActivity.this, url, entity,
 						new AsyncHttpResponseHandler() {
@@ -198,7 +212,6 @@ public class LoginActivity extends Activity {
 										String serialID = beanObj
 												.getString("s_id");
 										userBean.setuLevel(uLevel);
-										userBean.setuLevel("0");
 										userBean.setSerialID(serialID);
 
 										Intent mainIntent = new Intent(
@@ -544,9 +557,9 @@ public class LoginActivity extends Activity {
 					// 接下来的就是JSON对象的操作了
 					String code = userObj.getString("code");
 					JSONArray msgArray = userObj.getJSONArray("msg");
-					
-					for(int i = 0; i < msgArray.length(); i++) {
-		                JSONObject oj = msgArray.getJSONObject(i);
+
+					for (int i = 0; i < msgArray.length(); i++) {
+						JSONObject oj = msgArray.getJSONObject(i);
 						UserInfoBean userInfoBean = new UserInfoBean();
 						String ID = oj.getString("name");
 						String Name = oj.getString("person_name");
@@ -555,7 +568,7 @@ public class LoginActivity extends Activity {
 						userInfoBean.setName(Name);
 						userInfoBean.setLevel(level);
 						userInfoList.add(userInfoBean);
-		            }
+					}
 
 					isUserInfoBean = true;
 				} catch (JSONException ex) {

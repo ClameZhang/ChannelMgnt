@@ -143,6 +143,35 @@ public class FragmentDeliveryTwo extends Fragment {
 		spinner_goods = (Spinner) layout.findViewById(R.id.spinner_goods);
 		String url = "py_r/2002/" + SerialID;
 		goodsList = new ArrayList<String>();
+
+		btn_next = (Button) layout.findViewById(R.id.btn_next);
+		btn_next.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String goodName = spinner_goods.getSelectedItem().toString();
+				Bundle bundle = new Bundle();
+				bundle.putString("name", name);
+				bundle.putString("level", level);
+				bundle.putString("userName", userName);
+				bundle.putString("SerialID", SerialID);
+				bundle.putString("userLevel", userLevel);
+				bundle.putString("goodName", goodName);
+				bundle.putSerializable("GOODBEANS", goodList);
+				bundle.putSerializable("LEVELBEANS", levelList);
+				bundle.putSerializable("LIMITBEANS", limitList);
+				bundle.putSerializable("SERIALBEANS", serialList);
+				FragmentDeliveryThree fThree = new FragmentDeliveryThree();
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				fThree.setArguments(bundle);
+				tx.add(R.id.main_details, fThree, "FragmentDeliveryThree");
+				tx.addToBackStack(null);
+				tx.commit();
+			}
+		});
+		btn_next.setVisibility(View.GONE);
+		
 		RequestAPIClient.get(url, new AsyncHttpResponseHandler() {
 
 			@Override
@@ -175,6 +204,7 @@ public class FragmentDeliveryTwo extends Fragment {
 						spinner_goods
 								.setOnItemSelectedListener(new SpinnerSelectedListener());
 						spinner_goods.setVisibility(View.VISIBLE);
+						btn_next.setVisibility(View.VISIBLE);
 					} catch (JSONException ex) {
 						return;
 					}
@@ -186,33 +216,6 @@ public class FragmentDeliveryTwo extends Fragment {
 					Throwable arg3) {
 				// TODO Auto-generated method stub
 
-			}
-		});
-
-		btn_next = (Button) layout.findViewById(R.id.btn_next);
-		btn_next.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String goodName = spinner_goods.getSelectedItem().toString();
-				Bundle bundle = new Bundle();
-				bundle.putString("name", name);
-				bundle.putString("level", level);
-				bundle.putString("userName", userName);
-				bundle.putString("SerialID", SerialID);
-				bundle.putString("userLevel", userLevel);
-				bundle.putString("goodName", goodName);
-				bundle.putSerializable("GOODBEANS", goodList);
-				bundle.putSerializable("LEVELBEANS", levelList);
-				bundle.putSerializable("LIMITBEANS", limitList);
-				bundle.putSerializable("SERIALBEANS", serialList);
-				FragmentDeliveryThree fThree = new FragmentDeliveryThree();
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction tx = fm.beginTransaction();
-				fThree.setArguments(bundle);
-				tx.add(R.id.main_details, fThree, "FragmentDeliveryThree");
-				tx.addToBackStack(null);
-				tx.commit();
 			}
 		});
 

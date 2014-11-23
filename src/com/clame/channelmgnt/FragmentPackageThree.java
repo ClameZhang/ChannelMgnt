@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.clame.channelmgnt.FragmentDeliveryThree.OnDelSuccessListener;
 import com.clame.channelmgnt.bean.GoodBean;
 import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
@@ -48,6 +49,8 @@ public class FragmentPackageThree extends Fragment {
 	String goodID;
 	String serialID;
 	ArrayList<GoodBean> goodList = new ArrayList<GoodBean>();
+	
+	OnDelSuccessListener mListener;
 
 	public FragmentPackageThree() {
 	}
@@ -247,6 +250,8 @@ public class FragmentPackageThree extends Fragment {
 															public void onClick(
 																	DialogInterface dialog,
 																	int whichButton) {
+																app.setFragmentname("FragmentPackageOne");
+																mListener.onDelSuccess(0);
 															}
 														}).show();
 										return;
@@ -308,5 +313,9 @@ public class FragmentPackageThree extends Fragment {
 		}
 
 		boxID = flagID;
+	}
+
+	public interface OnPkgSuccessListener {
+		public void onPkgSuccess(int index);
 	}
 }

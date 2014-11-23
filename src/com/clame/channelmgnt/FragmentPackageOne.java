@@ -116,6 +116,33 @@ public class FragmentPackageOne extends Fragment {
 		String url = "py_r/2002/" + userBean.getSerialID();
 		goodsList = new ArrayList<String>();
 		spinner_goods = (Spinner) layout.findViewById(R.id.spinner_goods);
+
+		btn_next = (Button) layout.findViewById(R.id.btn_next);
+		btn_next.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String goodName = spinner_goods.getSelectedItem().toString();
+				String goodLimit = Helper.getLimit(limitList, goodList, goodName);
+				String goodID = Helper.getGoodID(goodList, goodName);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("GOODBEANS", goodList);
+				bundle.putString("userName", userBean.getUserName());
+				bundle.putString("serialID", userBean.getSerialID());
+				bundle.putString("goodName", goodName);
+				bundle.putString("goodID", goodID);
+				bundle.putString("goodLimit", goodLimit);
+				FragmentPackageTwo fTwo = new FragmentPackageTwo();
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction tx = fm.beginTransaction();
+				fTwo.setArguments(bundle);
+				tx.add(R.id.main_details, fTwo, "FragmentPackageTwo");
+				tx.addToBackStack(null);
+				tx.commit();
+			}
+		});
+		btn_next.setVisibility(View.GONE);
+		
 		RequestAPIClient.get(url, new AsyncHttpResponseHandler() {
 
 			@Override
@@ -148,6 +175,7 @@ public class FragmentPackageOne extends Fragment {
 						spinner_goods
 								.setOnItemSelectedListener(new SpinnerSelectedListener());
 						spinner_goods.setVisibility(View.VISIBLE);
+						btn_next.setVisibility(View.VISIBLE);
 					} catch (JSONException ex) {
 						return;
 					}
@@ -159,31 +187,6 @@ public class FragmentPackageOne extends Fragment {
 					Throwable arg3) {
 				// TODO Auto-generated method stub
 
-			}
-		});
-
-		btn_next = (Button) layout.findViewById(R.id.btn_next);
-		btn_next.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String goodName = spinner_goods.getSelectedItem().toString();
-				String goodLimit = Helper.getLimit(limitList, goodList, goodName);
-				String goodID = Helper.getGoodID(goodList, goodName);
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("GOODBEANS", goodList);
-				bundle.putString("userName", userBean.getUserName());
-				bundle.putString("serialID", userBean.getSerialID());
-				bundle.putString("goodName", goodName);
-				bundle.putString("goodID", goodID);
-				bundle.putString("goodLimit", goodLimit);
-				FragmentPackageTwo fTwo = new FragmentPackageTwo();
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction tx = fm.beginTransaction();
-				fTwo.setArguments(bundle);
-				tx.add(R.id.main_details, fTwo, "FragmentPackageTwo");
-				tx.addToBackStack(null);
-				tx.commit();
 			}
 		});
 

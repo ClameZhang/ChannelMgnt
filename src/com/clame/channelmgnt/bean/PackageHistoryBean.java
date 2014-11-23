@@ -7,6 +7,7 @@ public class PackageHistoryBean implements Serializable {
 
 	public String time;
 	public String name;
+	public String nfcID;
 
 	public String getTime() {
 		return time;
@@ -22,5 +23,13 @@ public class PackageHistoryBean implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNfcID() {
+		return nfcID;
+	}
+
+	public void setNfcID(String nfcID) {
+		this.nfcID = nfcID;
 	}
 }

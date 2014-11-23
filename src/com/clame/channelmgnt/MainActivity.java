@@ -30,7 +30,9 @@ import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements
+		FragmentDeliveryThree.OnDelSuccessListener,
+		FragmentPackageThree.OnPkgSuccessListener {
 
 	private NfcAdapter nfcAdapter;
 	private PendingIntent mPendingIntent;
@@ -45,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 
 	int userAuth = 0;
 	int delAuth = 0;
-	
+
 	public String fragmentName;
 
 	/** Called when the activity is first created. */
@@ -163,13 +165,13 @@ public class MainActivity extends FragmentActivity {
 			} else {
 				details = new FragmentDeliveryOne();
 				tag = "FragmentDeliveryOne";
-//				if (delAuth == 0) {
-//					details = new FragmentDeliveryOneSenior();
-//					tag = "FragmentDeliveryOneSenior";
-//				} else {
-//					details = new FragmentDeliveryOneNormal();
-//					tag = "FragmentDeliveryOneNormal";
-//				}
+				// if (delAuth == 0) {
+				// details = new FragmentDeliveryOneSenior();
+				// tag = "FragmentDeliveryOneSenior";
+				// } else {
+				// details = new FragmentDeliveryOneNormal();
+				// tag = "FragmentDeliveryOneNormal";
+				// }
 			}
 			break;
 		case 1:
@@ -193,16 +195,11 @@ public class MainActivity extends FragmentActivity {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("USERBEAN", userBean);
-		bundle.putSerializable("GOODBEANS",
-				goodList);
-		bundle.putSerializable("LEVELBEANS",
-				levelList);
-		bundle.putSerializable("LIMITBEANS",
-				limitList);
-		bundle.putSerializable("SERIALBEANS",
-				serialList);
-		bundle.putSerializable("USERINFOBEANS",
-				userInfoList);
+		bundle.putSerializable("GOODBEANS", goodList);
+		bundle.putSerializable("LEVELBEANS", levelList);
+		bundle.putSerializable("LIMITBEANS", limitList);
+		bundle.putSerializable("SERIALBEANS", serialList);
+		bundle.putSerializable("USERINFOBEANS", userInfoList);
 		details.setArguments(bundle);
 		ft.replace(R.id.main_details, details, tag);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -263,10 +260,9 @@ public class MainActivity extends FragmentActivity {
 			String mCurrentID = Helper.getNfcID(mfc.readPages(0),
 					mfc.readPages(1));
 
-			
-			final FragmentRecorder app = (FragmentRecorder)getApplication();
+			final FragmentRecorder app = (FragmentRecorder) getApplication();
 			String fragmentName = app.getFragmentname();
-			
+
 			FragmentPackageTwo fp2 = (FragmentPackageTwo) getSupportFragmentManager()
 					.findFragmentByTag("FragmentPackageTwo");
 			if (fp2 != null && fragmentName.equals("FragmentPackageTwo")) {
@@ -304,5 +300,33 @@ public class MainActivity extends FragmentActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		final FragmentRecorder app = (FragmentRecorder) getApplication();
+		String fragmentName = app.getFragmentname();
+
+		if (fragmentName.equals("FragmentDeliveryCheck")
+				|| fragmentName.equals("FragmentDeliveryOne")
+				|| fragmentName.equals("FragmentPackageOne")) {
+			this.setResult(-1);// 确定按钮事件
+			this.finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
+	public void onDelSuccess(int index) {
+		// TODO Auto-generated method stub
+		showDetails(index);
+	}
+
+	@Override
+	public void onPkgSuccess(int index) {
+		// TODO Auto-generated method stub
+		showDetails(index);
 	}
 }

@@ -17,6 +17,7 @@ import com.clame.channelmgnt.communication.RequestAPIClient;
 import com.clame.channelmgnt.helper.Helper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,12 +29,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -62,6 +59,8 @@ public class FragmentDeliveryThree extends Fragment {
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
+	
+	OnDelSuccessListener mListener;
 
 	public FragmentDeliveryThree() {
 	}
@@ -72,8 +71,9 @@ public class FragmentDeliveryThree extends Fragment {
 		if (container == null) {
 			return null;
 		}
-		
-		final FragmentRecorder app = (FragmentRecorder)this.getActivity().getApplication();
+
+		final FragmentRecorder app = (FragmentRecorder) this.getActivity()
+				.getApplication();
 		app.setFragmentname("FragmentDeliveryThree");
 
 		Bundle bundle = getArguments();
@@ -262,6 +262,8 @@ public class FragmentDeliveryThree extends Fragment {
 															public void onClick(
 																	DialogInterface dialog,
 																	int whichButton) {
+																app.setFragmentname("FragmentDeliveryOne");
+																mListener.onDelSuccess(0);
 															}
 														}).show();
 										return;
@@ -298,6 +300,16 @@ public class FragmentDeliveryThree extends Fragment {
 
 		return layout;
 	}
+	
+    @Override  
+    public void onAttach(Activity activity) {  
+        super.onAttach(activity);  
+        try {  
+            mListener = (OnDelSuccessListener) activity;  
+        } catch (ClassCastException e) {  
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");  
+        }  
+    }
 
 	public void update(String flagID, String nfcContent) {
 		String isContentOK = Helper.checkBigBoxTag(nfcContent, SerialID,
@@ -316,10 +328,14 @@ public class FragmentDeliveryThree extends Fragment {
 							}).show();
 			return;
 		}
-		
+
 		if (flagIDList.indexOf(flagID) < 0) {
 			flagIDList.add(flagID);
 			tv_scan_num.setText(String.valueOf(flagIDList.size()));
 		}
+	}
+
+	public interface OnDelSuccessListener {
+		public void onDelSuccess(int index);
 	}
 }

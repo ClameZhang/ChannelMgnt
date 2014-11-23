@@ -41,26 +41,205 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/rl_header"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:gravity="center|center_vertical"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:scaleType="fitXY"
-            android:src="@drawable/arrow" />
+        android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/ll_level0"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:gravity="center|center_vertical"
-            android:orientation="vertical" >
+            android:background="@drawable/linearlayout_white"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time0"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info0"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_level1"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/linearlayout_gray"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time1"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info1"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_level2"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/linearlayout_white"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_level3"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/linearlayout_gray"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time3"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info3"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_level4"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/linearlayout_white"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time4"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info4"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_level5"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/linearlayout_green"
+            android:gravity="left|center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp" >
+
+            <TextView
+                android:id="@+id/tv_chain_time5"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/fragment_step1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_chain_info5"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="@string/fragment_del_step1"
+                android:textColor="#000000"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 

@@ -223,9 +223,11 @@ public class FragmentDeliveryHistory extends Fragment {
 										String goodID = oj.getString("alname");
 										String goodName = Helper.getGoodName(
 												goodList, goodID);
+										String nfcID = oj.getString("par_id");
 										historyBean.setTime(time);
 										historyBean.setName(goodName);
 										historyBean.setRecvName(recvName);
+										historyBean.setNfcID(nfcID);
 										deliveryHistoryBean.add(historyBean);
 									}
 
@@ -256,7 +258,7 @@ public class FragmentDeliveryHistory extends Fragment {
 											String time = deliveryHistoryBean.get(i).getTime();
 											time = time.substring(0, 10) + " " + time.substring(11, 19);
 											map.put("tv_date", "发货时间：" + time);
-											map.put("tv_good", "商品：" + deliveryHistoryBean.get(i).getName());
+											map.put("tv_good", "商品：" + deliveryHistoryBean.get(i).getName() + "  (NFC_ID:" + deliveryHistoryBean.get(i).getNfcID() + ")");
 											map.put("tv_receiver", "收货人：" + deliveryHistoryBean.get(i).getRecvName());
 											list.add(map);
 										}

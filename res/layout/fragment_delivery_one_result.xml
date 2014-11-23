@@ -62,66 +62,71 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_uid"
+            android:id="@+id/ll_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ll_utitle"
             android:layout_marginTop="20dp"
             android:orientation="horizontal" >
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/fragment_del_step1_result_id"
-                android:textColor="#000000"
-                android:textSize="24sp" />
+                android:gravity="right|center_vertical"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/tv_uid"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:text="@string/fragment_del_step1_result_id"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:text="@string/fragment_del_step1_result_name"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textAlignment="viewStart"
-                android:textColor="#000000"
-                android:textSize="24sp" />
-        </LinearLayout>
+                android:gravity="left|center_vertical"
+                android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/ll_uname"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_uid"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/tv_uid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAlignment="viewStart"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/fragment_del_step1_result_name"
-                android:textColor="#000000"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/tv_uname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textAlignment="viewStart"
-                android:textColor="#000000"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/tv_uname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAlignment="viewStart"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_uname"
+            android:layout_below="@+id/ll_info"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"
             android:text="@string/fragment_next"
