@@ -26,7 +26,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,7 +40,7 @@ import android.widget.TextView;
  * @author Clame
  * 
  */
-public class FragmentDeliveryThree extends Fragment {
+public class FragmentDeliveryThree extends Fragment implements OnTouchListener {
 
 	ImageView iv_return;
 	ImageView iv_user;
@@ -59,7 +61,7 @@ public class FragmentDeliveryThree extends Fragment {
 	ArrayList<LimitBean> limitList = new ArrayList<LimitBean>();
 	ArrayList<LevelBean> levelList = new ArrayList<LevelBean>();
 	ArrayList<SerialBean> serialList = new ArrayList<SerialBean>();
-	
+
 	OnDelSuccessListener mListener;
 
 	public FragmentDeliveryThree() {
@@ -263,7 +265,8 @@ public class FragmentDeliveryThree extends Fragment {
 																	DialogInterface dialog,
 																	int whichButton) {
 																app.setFragmentname("FragmentDeliveryOne");
-																mListener.onDelSuccess(0);
+																mListener
+																		.onDelSuccess(0);
 															}
 														}).show();
 										return;
@@ -300,16 +303,30 @@ public class FragmentDeliveryThree extends Fragment {
 
 		return layout;
 	}
-	
-    @Override  
-    public void onAttach(Activity activity) {  
-        super.onAttach(activity);  
-        try {  
-            mListener = (OnDelSuccessListener) activity;  
-        } catch (ClassCastException e) {  
-            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");  
-        }  
-    }
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		view.setOnTouchListener(this);
+		super.onViewCreated(view, savedInstanceState);
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (OnDelSuccessListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnArticleSelectedListener");
+		}
+	}
 
 	public void update(String flagID, String nfcContent) {
 		String isContentOK = Helper.checkBigBoxTag(nfcContent, SerialID,

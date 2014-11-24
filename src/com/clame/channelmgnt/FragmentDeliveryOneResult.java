@@ -28,9 +28,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -44,7 +46,7 @@ import android.widget.TextView;
  * @author Clame
  * 
  */
-public class FragmentDeliveryOneResult extends Fragment {
+public class FragmentDeliveryOneResult extends Fragment implements OnTouchListener {
 
 	ImageView iv_return;
 	ImageView iv_user;
@@ -171,5 +173,18 @@ public class FragmentDeliveryOneResult extends Fragment {
 		});
 
 		return layout;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		view.setOnTouchListener(this);
+		super.onViewCreated(view, savedInstanceState);
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }
